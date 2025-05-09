@@ -9,7 +9,7 @@
   <h3 align="center">Inventox</h3>
 
   <p align="center">
-    This project is a stock management system.
+    This project is an inventory management system.
     <br />
     <br />
     <a href="https://github.com/lucasjacques/inventox/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
