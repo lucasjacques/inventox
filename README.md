@@ -11,8 +11,6 @@
   <p align="center">
     This project is a stock management system.
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
     <br />
     <a href="https://github.com/lucasjacques/inventox/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
