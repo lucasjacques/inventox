@@ -1,3 +1,23 @@
+<a id="readme-top"></a>
+
+<br />
+<div align="center">
+  <a href="https://github.com/lucasjacques/inventox/">
+    <img src="public/logo.svg" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">Inventox</h3>
+
+  <p align="center">
+    This project is an inventory management system.
+    <br />
+    <br />
+    <a href="https://github.com/lucasjacques/inventox/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    &middot;
+    <a href="https://github.com/lucasjacques/inventox/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+  </p>
+</div>
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
