@@ -36,7 +36,7 @@ import Link from "next/link"
 
 export const HomeNavbar = () => {
   return (
-    <nav className="fixed top-0 left-0 right-0 h-16 bg-white flex items-center px-2 pr-5 z-50">
+    <nav className="fixed top-0 left-0 right-0 h-16 bg-blue-500 flex items-center px-2 pr-5 z-50">
       <div className="flex items-center gap-4 w-full">
         {/* Menu and Logo */}
         <div className="flex items-center flex-shrink-0">
@@ -49,22 +49,22 @@ export const HomeNavbar = () => {
             <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-xl">Item One</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="text-xl">Estoque</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <NavigationMenuLink>Link</NavigationMenuLink>
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-xl">Item Two</NavigationMenuTrigger>
+                <p className="text-xl p-4">Entrada</p>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-xl">Item Three</NavigationMenuTrigger>
+                <p className="text-xl p-4">Saída</p>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-xl">Item Four</NavigationMenuTrigger>
+                <p className="text-xl p-4">Imprimir</p>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-xl">Item Five</NavigationMenuTrigger>
+                <p className="text-xl p-4">Sair</p>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
