@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
-import { Inter, Share_Tech } from "next/font/google";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
+import { Share_Tech } from "next/font/google";
 import "./globals.css";
 
 const shareTech = Share_Tech({weight: "400", subsets:["latin"]});
@@ -15,12 +23,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={shareTech.className}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+
+      <html lang="en">
+        <body
+          className={shareTech.className}
+          >
+          <header className="flex justify-end items-center p-4 gap-4 h-16">
+            <SignedOut>
+              <SignInButton />
+              <SignUpButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </header>
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

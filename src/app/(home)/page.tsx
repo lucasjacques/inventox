@@ -9,6 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
 
 const data = [
   {
@@ -51,6 +54,8 @@ const data = [
 
 export default function Home() {
   return(
+
+  <ClerkProvider>
     <div>
       <div className="h-16"></div>
       <div className="pl-6">
@@ -94,5 +99,6 @@ export default function Home() {
         </Table>
       </div>
     </div>
+    </ClerkProvider>
   );
 }
