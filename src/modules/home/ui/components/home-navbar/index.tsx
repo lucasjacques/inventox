@@ -16,6 +16,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
+import { Button } from "@/components/ui/button"
 
 export const HomeNavbar = () => {
   return (
@@ -39,18 +40,24 @@ export const HomeNavbar = () => {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <p className="text-xl p-4">Entrada</p>
+                  <Button>
+                    <p className="text-xl p-4">Entrada</p>
+                  </Button>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <p className="text-xl p-4">Saída</p>
+                  <Button>
+                    <p className="text-xl p-4">Saída</p>
+                  </Button>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <p className="text-xl p-4">Imprimir</p>
+                  <Button>
+                    <p className="text-xl p-4">Imprimir</p>
+                  </Button>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>
-          <div>
+          <div className="pl-12">
             <AuthButton />
           </div>
         </div>
