@@ -1,3 +1,13 @@
+import Image from "next/image"
+import Link from "next/link"
+import {
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
+
+import { AuthButton } from "@/modules/auth/ui/components/auth-button"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -6,15 +16,6 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
-import Image from "next/image"
-import Link from "next/link"
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
-} from '@clerk/nextjs'
 
 export const HomeNavbar = () => {
   return (
@@ -28,36 +29,31 @@ export const HomeNavbar = () => {
               <p className="text-xl font-semibold tracking-tight">Inventox</p>
             </div>
           </Link>
+          <div>
             <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-xl">Estoque</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <NavigationMenuLink>Link</NavigationMenuLink>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <p className="text-xl p-4">Entrada</p>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <p className="text-xl p-4">Saída</p>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <p className="text-xl p-4">Imprimir</p>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <SignedOut>
-                  <SignInButton />
-                </SignedOut>
-                <SignedIn>
-                  <UserButton />
-                </SignedIn>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-          
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-xl">Estoque</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <NavigationMenuLink>Link</NavigationMenuLink>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <p className="text-xl p-4">Entrada</p>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <p className="text-xl p-4">Saída</p>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <p className="text-xl p-4">Imprimir</p>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+          <div>
+            <AuthButton />
+          </div>
         </div>
-
       </div>
     </nav>
   )
