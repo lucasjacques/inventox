@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/button"
 import { UserCircleIcon } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 
 export const AuthButton = () => {
   return (
