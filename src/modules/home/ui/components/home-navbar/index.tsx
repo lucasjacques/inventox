@@ -7,6 +7,7 @@ import {
   UserButton
 } from '@clerk/nextjs'
 
+import { Button } from "@/components/ui/button"
 import { AuthButton } from "@/modules/auth/ui/components/auth-button"
 import {
   NavigationMenu,
@@ -16,7 +17,25 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
-import { Button } from "@/components/ui/button"
+
+const items = [
+  {
+    name: "Estoque",
+    auth: true
+  },
+  {
+    name: "Entrada",
+    auth: true
+  },
+  {
+    name: "Saída",
+    auth: true
+  },
+  {
+    name: "Imprimir",
+    auth: true
+  },
+];
 
 export const HomeNavbar = () => {
   return (
@@ -34,27 +53,14 @@ export const HomeNavbar = () => {
           <div className="flex-1 flex justify-center">
             <NavigationMenu>
               <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Estoque</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <NavigationMenuLink>Link</NavigationMenuLink>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Button>
-                  <p className="p-4">Entrada</p>
-                  </Button>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Button>
-                    <p className="p-4">Saída</p>
-                  </Button>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Button>
-                    <p className="p-4">Imprimir</p>
-                  </Button>
-                </NavigationMenuItem>
+                {items.map((item)=>{
+                  return (
+                    <NavigationMenuItem>
+                      <Button>
+                        <p className="p-4">{item.name}</p>
+                      </Button>
+                    </NavigationMenuItem>)
+                })}
               </NavigationMenuList>
             </NavigationMenu>
           </div>
