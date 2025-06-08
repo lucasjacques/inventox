@@ -86,7 +86,7 @@ export default function Home() {
               return (
                 <TableRow>
                   <TableCell className="font-medium">{row.name}</TableCell>
-                  <TableCell>{row.price}</TableCell>
+                  <TableCell className="font-medium text-xl text-red-500 "><b>{row.price}</b></TableCell>
                   <TableCell>{row.entry}</TableCell>
                   <TableCell className="text-center">{row.exit}</TableCell>
                   <TableCell className="text-center">{row.total}</TableCell>

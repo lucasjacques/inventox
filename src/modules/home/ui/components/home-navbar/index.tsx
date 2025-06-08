@@ -1,21 +1,12 @@
 import Image from "next/image"
 import Link from "next/link"
-import {
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
-} from '@clerk/nextjs'
 
 import { Button } from "@/components/ui/button"
 import { AuthButton } from "@/modules/auth/ui/components/auth-button"
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 
 const items = [
