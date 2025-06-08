@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image"
 import Link from "next/link"
+import { useAuth, useClerk } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button"
 import { AuthButton } from "@/modules/auth/ui/components/auth-button"
@@ -12,23 +15,30 @@ import {
 const items = [
   {
     name: "Estoque",
+    url: "/inventory",
     auth: true
   },
   {
     name: "Entrada",
+    url: "/stock-ins",
     auth: true
   },
   {
     name: "Saída",
+    url: "/stock-outs",
     auth: true
   },
   {
     name: "Imprimir",
+    url: "/print",
     auth: true
   },
 ];
 
 export const HomeNavbar = () => {
+  const clerk = useClerk();
+  const { isSignedIn } = useAuth(); 
+
   return (
     <nav className="fixed top-0 left-0 right-0 h-16 bg-blue-500 flex items-center px-2 pr-5 z-50">
       <div className="flex items-center gap-4 w-full">
@@ -47,8 +57,15 @@ export const HomeNavbar = () => {
                 {items.map((item)=>{
                   return (
                     <NavigationMenuItem>
-                      <Button>
-                        <p className="p-4">{item.name}</p>
+                      <Button onClick={(e)=>{
+                        if (!isSignedIn && item.auth ) {
+                          e.preventDefault();
+                          return clerk.openSignIn();
+                        }
+                      }}>
+                        <Link href={item.url}>
+                            <p className="p-4">{item.name}</p>
+                        </Link>
                       </Button>
                     </NavigationMenuItem>)
                 })}
