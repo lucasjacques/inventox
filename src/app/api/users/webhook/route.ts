@@ -12,21 +12,15 @@ export async function POST(req: NextRequest) {
     const eventType = evt.type
     
     if ( eventType === "user.created" ) {
-      const data = evt.data
+      const { data } = evt
       
       console.log(`Received webhook with ID ${data.id} and event type of ${eventType}`)
       console.log('Webhook payload:', evt.data)
-      if (!!data.username) {
-        await db.insert(users).values({
-          name: data.username || "",
-          clerkId: data.id,
-          email: data.email_addresses[0].email_address,
-        });
-      }
-      else {
-        throw new Error("No username was found.")
-      }
-
+      await db.insert(users).values({
+        name: data.username || "",
+        clerkId: data.id,
+        email: data.email_addresses[0].email_address,
+      });
     }
 
     return new Response('Webhook received', { status: 200 })
