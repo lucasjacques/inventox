@@ -1,6 +1,7 @@
 import { db } from '@/db'
 import { users } from '@/db/schema'
 import { verifyWebhook } from '@clerk/nextjs/webhooks'
+import { eq } from 'drizzle-orm'
 import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
@@ -12,15 +13,45 @@ export async function POST(req: NextRequest) {
     const eventType = evt.type
     
     if ( eventType === "user.created" ) {
-      const { data } = evt
+      const { data } = evt;
       
-      console.log(`Received webhook with ID ${data.id} and event type of ${eventType}`)
-      console.log('Webhook payload:', evt.data)
+      if (!data.username) {
+        return new Response("Missing username", { status: 400 });
+      }
+
       await db.insert(users).values({
-        name: data.username || "",
+        name: data.username,
         clerkId: data.id,
         email: data.email_addresses[0].email_address,
+        imageUrl: data.image_url,
       });
+    }
+
+    if ( eventType === "user.deleted" ) {
+      const { data } = evt;
+
+      if (!data.id) {
+        return new Response("Missing user id", { status: 400 });
+      }
+
+      await db.delete(users).where(eq(users.clerkId, data.id));
+    }
+
+    if ( eventType === "user.updated" ) {
+      const { data } = evt;
+
+      if (!data.username) {
+        return new Response("Missing username", { status: 400 });
+      }
+
+      await db
+        .update(users)
+        .set({
+          name: data.username,
+          email: data.email_addresses[0].email_address,
+          imageUrl: data.image_url,
+        })
+        .where(eq(users.clerkId, data.id));
     }
 
     return new Response('Webhook received', { status: 200 })
