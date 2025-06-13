@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+"use client";
+
 import {
   Table,
   TableBody,
@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { trpc } from "@/trpc/client";
 import {
   ClerkProvider,
 } from '@clerk/nextjs'
@@ -53,6 +54,9 @@ const data = [
 ]
 
 export default function Home() {
+
+  const hello = trpc.hello.useQuery({ text: "Lucas" });
+
   return(
 
   <ClerkProvider>
@@ -60,7 +64,7 @@ export default function Home() {
       <div className="h-16"></div>
       <div className="pl-6">
         <Table>
-          <TableCaption>Lista do estoque atualizado</TableCaption>
+          <TableCaption>Lista do estoque atualizado e {hello.data?.greeting}</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead>Nome</TableHead>

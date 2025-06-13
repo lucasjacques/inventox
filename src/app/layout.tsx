@@ -9,6 +9,7 @@ import {
 } from '@clerk/nextjs'
 import { Share_Tech } from "next/font/google";
 import "./globals.css";
+import { TRPCProvider } from "@/trpc/client";
 
 const shareTech = Share_Tech({weight: "400", subsets:["latin"]});
 
@@ -38,7 +39,9 @@ export default function RootLayout({
               <UserButton />
             </SignedIn>
           </header>
-          {children}
+          <TRPCProvider>
+            {children}
+          </TRPCProvider>
         </body>
       </html>
     </ClerkProvider>
