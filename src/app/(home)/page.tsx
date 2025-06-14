@@ -1,5 +1,7 @@
-"use client";
-
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary'
+import { PageClient } from './client';
+import { HydrateClient, trpc } from "@/trpc/server";
 import {
   Table,
   TableBody,
@@ -9,10 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { trpc } from "@/trpc/client";
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
 
 const data = [
   {
@@ -53,18 +51,19 @@ const data = [
   },
 ]
 
-export default function Home() {
+export default async function Home() {
 
-  const hello = trpc.hello.useQuery({ text: "Lucas" });
+  void trpc.hello.prefetch({ text: "Lucas2" })
 
   return(
-
-  <ClerkProvider>
+    <HydrateClient>
+      <Suspense fallback={<p>Loading...</p>}>
+        <ErrorBoundary fallback={<p>Error...</p>}>
     <div>
       <div className="h-16"></div>
       <div className="pl-6">
         <Table>
-          <TableCaption>Lista do estoque atualizado e {hello.data?.greeting}</TableCaption>
+          <TableCaption>Lista do estoque atualizado</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead>Nome</TableHead>
@@ -102,7 +101,10 @@ export default function Home() {
           </TableBody>
         </Table>
       </div>
+      <PageClient />
     </div>
-    </ClerkProvider>
+        </ErrorBoundary>
+      </Suspense>
+    </HydrateClient>
   );
 }
