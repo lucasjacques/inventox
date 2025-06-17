@@ -82,9 +82,9 @@ export const PageClient = () => {
                 <TableCell className="text-center">20</TableCell>
                 <TableCell className="text-center">1380</TableCell>
               </TableRow>
-              {tableData.map((row)=> {
+              {tableData.map((row, index)=> {
                 return (
-                  <TableRow>
+                  <TableRow key={index}>
                     <TableCell className="font-medium">{row.name}</TableCell>
                     <TableCell className="font-medium text-xl text-red-500 "><b>{row.price}</b></TableCell>
                     <TableCell>{row.entry}</TableCell>
