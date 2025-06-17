@@ -54,9 +54,9 @@ export const HomeNavbar = () => {
           <div className="flex-1 flex justify-center">
             <NavigationMenu>
               <NavigationMenuList>
-                {items.map((item)=>{
+                {items.map((item, index)=>{
                   return (
-                    <NavigationMenuItem>
+                    <NavigationMenuItem key={index}>
                       <Button onClick={(e)=>{
                         if (!isSignedIn && item.auth ) {
                           e.preventDefault();
