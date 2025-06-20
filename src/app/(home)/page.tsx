@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary'
 import { PageClient } from './client';
 import { HydrateClient, trpc } from "@/trpc/server";
+import { ClerkLoaded } from '@clerk/nextjs';
 
 export default async function Home() {
 
@@ -11,7 +12,9 @@ export default async function Home() {
     <HydrateClient>
       <Suspense fallback={<p>Loading...</p>}>
         <ErrorBoundary fallback={<p>Error...</p>}>
-          <PageClient />
+          <ClerkLoaded>
+            <PageClient />
+          </ClerkLoaded>
         </ErrorBoundary>
       </Suspense>
     </HydrateClient>
