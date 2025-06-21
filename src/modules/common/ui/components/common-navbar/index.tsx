@@ -35,7 +35,7 @@ const items = [
   },
 ];
 
-export const HomeNavbar = () => {
+export const CommonNavbar = () => {
   const clerk = useClerk();
   const { isSignedIn } = useAuth(); 
 

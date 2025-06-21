@@ -34,12 +34,12 @@ export const protectedProcedure = t.procedure.use( async function isAuthed(opts)
   if (!ctx.clerkUserId) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-
+  
   const [ user ] = await db
-    .select()
-    .from(users)
-    .where(eq(users.clerkId, ctx.clerkUserId))
-
+  .select()
+  .from(users)
+  .where(eq(users.clerkId, ctx.clerkUserId))
+  
   if (!user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }

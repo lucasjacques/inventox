@@ -1,16 +1,16 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 
-import { HomeNavbar } from "../components/home-navbar";
+import { CommonNavbar } from "../components/common-navbar";
 
-interface HomeLayoutProps {
+interface CommonLayoutProps {
   children: React.ReactNode;
 };
 
-export const HomeLayout = ({ children }: HomeLayoutProps) => {
+export const CommonLayout = ({ children }: CommonLayoutProps) => {
     return (
       <SidebarProvider>
         <div className="w-full">
-          <HomeNavbar />
+          <CommonNavbar />
           <div>
             {children}
           </div>
