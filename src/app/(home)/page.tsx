@@ -1,10 +1,11 @@
-import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary'
-import { PageClient } from './client';
-
 export default async function Home() {
 
   return(
-    <PageClient />
+    <div>
+      <div className="h-16"></div>
+      <div className="pl-6">
+        <p>Bem vindo(a) ao Sistema Inventox!</p>
+      </div>
+    </div>
   );
 }
