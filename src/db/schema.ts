@@ -11,15 +11,25 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (t) => [uniqueIndex("clerk_id_idx").on(t.clerkId)]);
 
+export const userRelations = relations(users, ({ many }) => ({
+  stockIns: many(stockIns),
+}));
+
 export const groups = pgTable("groups", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
 });
 
+export const groupRelations = relations(groups, ({ many }) => ({
+  products: many(products),
+}));
+
 export const products = pgTable("products", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
-  groupId: uuid("group_id").references(() => groups.id),
+  groupId: uuid("group_id").references(() => groups.id, {
+    onDelete: "set null"
+  }),
 });
 
 export const productRelations = relations(products, ({ one }) => ({
@@ -32,11 +42,15 @@ export const productRelations = relations(products, ({ one }) => ({
 export const stockIns = pgTable("stock_ins", {
   id: uuid("id").primaryKey().defaultRandom(),
   value: integer("value").notNull(),
-  productId: uuid("product_id").references(() => products.id),
-  userId: uuid("user_id").references(()=> users.id)
+  productId: uuid("product_id").notNull().references(() => products.id, {
+    onDelete: "cascade"
+  }),
+  userId: uuid("user_id").notNull().references(()=> users.id, {
+    onDelete: "cascade"
+  })
 });
 
-export const stockInsRelations = relations(stockIns, ({ one }) => ({
+export const stockInRelations = relations(stockIns, ({ one }) => ({
   product: one(products, {
     fields: [stockIns.productId],
     references: [products.id]
