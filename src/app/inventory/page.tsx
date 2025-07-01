@@ -6,8 +6,6 @@ import { ClerkLoaded } from '@clerk/nextjs';
 
 export default async function Home() {
 
-  void trpc.hello.prefetch({ text: "Lucas3" })
-
   return(
     <HydrateClient>
       <Suspense fallback={<p>Loading...</p>}>

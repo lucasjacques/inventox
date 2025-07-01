@@ -39,9 +39,7 @@ const tableData = [
 ]
 
 export const PageClient = () => {
-  const [ data ] = trpc.hello.useSuspenseQuery({
-    text: "Lucas",
-  });
+  const [ data ] = trpc.stockIns.getMany.useSuspenseQuery();
 
   return (
     <div>
@@ -77,7 +75,7 @@ export const PageClient = () => {
           </TableBody>
         </Table>
           </div>
-      Page client says: {data.greeting}
+      Page client says: {JSON.stringify(data)}
     </div>
   )
 }

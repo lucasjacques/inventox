@@ -51,9 +51,6 @@ const tableData = [
 ]
 
 export const PageClient = () => {
-  const [ data ] = trpc.hello.useSuspenseQuery({
-    text: "Lucas",
-  });
 
   return (
       <div>
@@ -97,8 +94,7 @@ export const PageClient = () => {
               })}
             </TableBody>
           </Table>
-            </div>
-        Page client says: {data.greeting}
+        </div>
       </div>
   )
 }
