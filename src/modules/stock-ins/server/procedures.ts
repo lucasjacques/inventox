@@ -1,11 +1,16 @@
 import { db } from "@/db";
-import { stockIns } from "@/db/schema";
-import { protectedProcedure, createTRPCRouter, baseProcedure } from "@/trpc/init";
+import { products, stockIns, users } from "@/db/schema";
+import { protectedProcedure, createTRPCRouter } from "@/trpc/init";
+import { eq } from "drizzle-orm";
 
 export const stockInsRouter = createTRPCRouter({
-  getMany: baseProcedure.query(async () => {
-    const data = await db.select().from(stockIns);
+  getMany: protectedProcedure.query(async () => {
+    const stockInsData = await db
+      .select()
+      .from(stockIns)
+      .innerJoin(products, eq(stockIns.productId, products.id))
+      .innerJoin(users, eq(stockIns.userId, users.id));
 
-    return data;
+    return stockInsData;
   }),
 })

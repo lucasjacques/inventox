@@ -33,6 +33,7 @@ export const baseProcedure = t.procedure;
 export const protectedProcedure = t.procedure.use( async function isAuthed(opts) {
   const { ctx } = opts;
   if (!ctx.clerkUserId) {
+    console.log('clerkid')
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   
@@ -42,6 +43,7 @@ export const protectedProcedure = t.procedure.use( async function isAuthed(opts)
   .where(eq(users.clerkId, ctx.clerkUserId || ""))
   
   if (!user) {
+    console.log('user', ctx.clerkUserId)
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
