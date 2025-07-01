@@ -1,34 +1,35 @@
 import { faker } from "@faker-js/faker"
 
 import { db } from "@/db"
-import { groups, products, users } from "@/db/schema"
+import { groups, products, stockIns, users } from "@/db/schema"
+import { getRandomInteger } from "@/lib/utils";
 
 const groupProducts = {
   FILES: [
     "FILE DE ANCHOVA -P- cx 14",
     "FILE DE ANCHOVA cx 14",
     "FILE DE CORVINA -P CX 14 KÇ",
-    "FILE DE CORVINA -M CXS 14 KG",
-    "FILE DE CORVINA -G  CX 14KG",
-    "FILE DE  ESPADA BANDEJA CX 17 KG",
-    "FILE DE  ESPADA  BANDEJA -G 17 KG",
-    "FILE DE ESPADA BLOCO 16 KG SACO RAFIA",
-    "FILE DE GORDINHO",
-    "FILE DE GUAIVIRA  P CX 14 KG",
-    "FILE DE GUAIVIRA -M-- CX 14 KG",
-    "FILE DE GUAIVIRA  M-G CX 14 KG",
-    "FILE DE GUAIVIRA - G- 14 KG  CX 14 KG",
-    "FILE DE LAJE ESPALMADA PGT 1K CX 15 KG",
-    "FILE DE MISTURA AGRANEL CX 14 KG",
-    "FILE DE PARU  -M      14 KG",
-    "FILE DE PESCADA BICUDA  CX 14 KG",
-    "FILE DE SOROROCA CX 15 KG",
+    // "FILE DE CORVINA -M CXS 14 KG",
+    // "FILE DE CORVINA -G  CX 14KG",
+    // "FILE DE  ESPADA BANDEJA CX 17 KG",
+    // "FILE DE  ESPADA  BANDEJA -G 17 KG",
+    // "FILE DE ESPADA BLOCO 16 KG SACO RAFIA",
+    // "FILE DE GORDINHO",
+    // "FILE DE GUAIVIRA  P CX 14 KG",
+    // "FILE DE GUAIVIRA -M-- CX 14 KG",
+    // "FILE DE GUAIVIRA  M-G CX 14 KG",
+    // "FILE DE GUAIVIRA - G- 14 KG  CX 14 KG",
+    // "FILE DE LAJE ESPALMADA PGT 1K CX 15 KG",
+    // "FILE DE MISTURA AGRANEL CX 14 KG",
+    // "FILE DE PARU  -M      14 KG",
+    // "FILE DE PESCADA BICUDA  CX 14 KG",
+    // "FILE DE SOROROCA CX 15 KG",
   ],
   LAJE: [
     "LAJE BLOCO 15 KG",
     "LAJE EVISC  SC S/PÇS CX 15KG",
     "LAJE EVISC  SC S/PÇS PCT DE 1 K CX 15KG",
-    "LAJE  EVISC S/C 8/10   15 KG",
+    // "LAJE  EVISC S/C 8/10   15 KG",
   ]
 } as const;
 
@@ -38,28 +39,28 @@ const products1StockIns  = [
   3,
   1,
   24,
-  56,
-  5,
-  174,
-  86,
-  44,
-  1,
-  35,
-  25,
-  224,
-  1,
-  34,
-  181,
-  30,
-  30,
-  15,
+  // 56,
+  // 5,
+  // 174,
+  // 86,
+  // 44,
+  // 1,
+  // 35,
+  // 25,
+  // 224,
+  // 1,
+  // 34,
+  // 181,
+  // 30,
+  // 30,
+  // 15,
 ];
 
 const products2StockIns = [
   70,
   0,
   667,
-  351,
+  // 351,
 ];
 
 async function main() {
@@ -72,7 +73,7 @@ async function main() {
       email: faker.internet.email(),
     }));
 
-    await db.insert(users).values(userValues);
+    const insertedUsers = await db.insert(users).values(userValues).returning();
 
     const groupNames = Object.keys(groupProducts)
     const groupValues = groupNames.map((name) => ({ name }))
@@ -86,8 +87,19 @@ async function main() {
         groupId: group.id,
       }));
     });
+    const insertedProducts = await db.insert(products).values(productValues).returning();
 
-    await db.insert(products).values(productValues);
+    const stockInValues = products1StockIns.map((value, index) => ({
+      value: value,
+      productId: insertedProducts[index].id,
+      userId: getRandomInteger(1,2) ? insertedUsers[0].id : insertedUsers[1].id,
+    })).concat(products2StockIns.map((value, index) => ({
+      value: value,
+      productId: insertedProducts[index+3].id,
+      userId: getRandomInteger(0,1) ? insertedUsers[0].id : insertedUsers[1].id,
+    })));
+
+    await db.insert(stockIns).values(stockInValues);
 
     console.log("Db seeded successfully");
   } catch (error) {
