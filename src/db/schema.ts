@@ -47,7 +47,9 @@ export const stockIns = pgTable("stock_ins", {
   }),
   userId: uuid("user_id").notNull().references(()=> users.id, {
     onDelete: "cascade"
-  })
+  }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),  
 });
 
 export const stockInRelations = relations(stockIns, ({ one }) => ({
