@@ -2,8 +2,8 @@ import { Suspense } from 'react';
 import { ClerkLoaded } from '@clerk/nextjs';
 import { ErrorBoundary } from 'react-error-boundary'
 
-import { PageClient } from './client';
 import { HydrateClient, trpc } from "@/trpc/server";
+import { StockInsView } from '@/modules/stock-ins/ui/view/stock-ins-view';
 
 export default async function Home() {
 
@@ -14,7 +14,7 @@ export default async function Home() {
       <Suspense fallback={<p>Loading...</p>}>
         <ErrorBoundary fallback={<p>Error...</p>}>
           <ClerkLoaded>
-            <PageClient />
+            <StockInsView />
           </ClerkLoaded>
         </ErrorBoundary>
       </Suspense>

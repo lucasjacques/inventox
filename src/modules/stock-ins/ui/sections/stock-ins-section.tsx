@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export const PageClient = () => {
+export const StockInsSection = () => {
   const [ data ] = trpc.stockIns.getMany.useSuspenseQuery();
 
   return (
