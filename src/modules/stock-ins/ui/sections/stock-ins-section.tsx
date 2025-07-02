@@ -1,6 +1,9 @@
 "use client";
 
 import { trpc } from "@/trpc/client";
+import { DEFAULT_LIMIT } from "@/constants";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -10,11 +13,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 export const StockInsSection = () => {
-  const [ data ] = trpc.stockIns.getMany.useSuspenseQuery();
+  const [ data ] = trpc.stockIns.getMany.useSuspenseInfiniteQuery({
+    limit: DEFAULT_LIMIT,
+  }, {
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+  });
 
   return (
     <div>
@@ -47,14 +52,18 @@ export const StockInsSection = () => {
               <TableCell className="text-center">69</TableCell>
               <TableCell className="text-center">Jane</TableCell>
             </TableRow>
-            {data.map((row, index)=> {
+            {data.pages.map((page)=> {
               return (
-                <TableRow key={index}>
+                page.items.map((row, index) => {
+                  return (
+                  <TableRow key={index}>
                   <TableCell className="font-medium">{row.stock_ins.createdAt.toLocaleString()}</TableCell>
                   <TableCell >{row.products.name}</TableCell>
                   <TableCell className="text-center">{row.stock_ins.value}</TableCell>
                   <TableCell className="text-center">{row.users.name}</TableCell>
                 </TableRow>
+                )
+              })
               )
             })}
           </TableBody>
