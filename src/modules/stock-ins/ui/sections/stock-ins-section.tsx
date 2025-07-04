@@ -95,20 +95,17 @@ const StockInsSectionSuspense = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.pages.map((page)=> {
-              return (
-                page.items.map((row, index) => {
+            {data.pages.flatMap((page)=> page.items).map((row, index) => {
                   return (
                   <TableRow key={index}>
-                  <TableCell className="font-medium">{row.stock_ins.createdAt.toLocaleString()}</TableCell>
-                  <TableCell >{row.products.name}</TableCell>
-                  <TableCell className="text-center">{row.stock_ins.value}</TableCell>
-                  <TableCell className="text-center">{row.users.name}</TableCell>
-                </TableRow>
+                    <TableCell className="font-medium">{row.stock_ins.createdAt.toLocaleString()}</TableCell>
+                    <TableCell >{row.products.name}</TableCell>
+                    <TableCell className="text-center">{row.stock_ins.value}</TableCell>
+                    <TableCell className="text-center">{row.users.name}</TableCell>
+                  </TableRow>
                 )
               })
-              )
-            })}
+            }
           </TableBody>
         </Table>
         <InfiniteScroll
