@@ -50,10 +50,15 @@ export const stockInsRouter = createTRPCRouter({
         updatedAt: lastItem.stock_ins.updatedAt,
       }
       : null;
+      
+    const productsData = await db
+      .select()
+      .from(products);
 
     return {
       items,
-      nextCursor
+      productsData,
+      nextCursor,
     };
   }),
 })

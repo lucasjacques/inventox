@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const StockInsSection = () => {
   const [ data ] = trpc.stockIns.getMany.useSuspenseInfiniteQuery({
@@ -25,8 +26,20 @@ export const StockInsSection = () => {
     <div>
       <div className="flex justify-center">
         <div className="m-4 flex w-[800px]">
-          <Input className="m-2" type="text" placeholder="Produto">
-          </Input>
+          <Select>
+            <SelectTrigger className="m-2">
+              <SelectValue placeholder="Selecione um Produto" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {data.pages[0].productsData.map((product)=> {
+                  return (
+                    <SelectItem value={product.id}>{product.name}</SelectItem>
+                  )
+                })}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
           <Input  className="m-2" type="number" placeholder="Valor">
           </Input>
           <Button className="m-2">
