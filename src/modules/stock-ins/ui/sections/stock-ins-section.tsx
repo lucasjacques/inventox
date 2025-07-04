@@ -1,9 +1,22 @@
 "use client";
 
+import { Loader2Icon, PlusIcon } from "lucide-react";
+import { toast } from "sonner";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+
 import { trpc } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { 
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -13,13 +26,35 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { InfiniteScroll } from "@/components/infinite-scroll";
 
 export const StockInsSection = () => {
-  const [ data ] = trpc.stockIns.getMany.useSuspenseInfiniteQuery({
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+        <ErrorBoundary fallback={<p>Error...</p>}>
+          <StockInsSectionSuspense />
+        </ErrorBoundary>
+    </Suspense>
+  )
+}
+
+
+const StockInsSectionSuspense = () => {
+  const [ data, query ] = trpc.stockIns.getMany.useSuspenseInfiniteQuery({
     limit: DEFAULT_LIMIT,
   }, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
+  });
+
+  const utils = trpc.useUtils();
+  const create = trpc.stockIns.create.useMutation({
+    onSuccess: () => {
+      toast.success("Entrada criada com sucesso!");
+      utils.stockIns.getMany.invalidate();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
   });
 
   return (
@@ -32,9 +67,9 @@ export const StockInsSection = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {data.pages[0].productsData.map((product)=> {
+                {data.pages[0].productsData.map((product, index)=> {
                   return (
-                    <SelectItem value={product.id}>{product.name}</SelectItem>
+                    <SelectItem key={index} value={product.id}>{product.name}</SelectItem>
                   )
                 })}
               </SelectGroup>
@@ -42,7 +77,8 @@ export const StockInsSection = () => {
           </Select>
           <Input  className="m-2" type="number" placeholder="Valor">
           </Input>
-          <Button className="m-2">
+          <Button className="m-2" onClick={() => create.mutate()} disabled={create.isPending}>
+            {create.isPending ? <Loader2Icon className="animate-spin"/> : <PlusIcon />}
             Inserir nova entrada
           </Button>
         </div>
@@ -59,12 +95,6 @@ export const StockInsSection = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="font-medium w-[200px]">23/06/2025, 13:24:02</TableCell>
-              <TableCell >BONITO -P- SACO DE 20 KG SACO RAFIA</TableCell>
-              <TableCell className="text-center">69</TableCell>
-              <TableCell className="text-center">Jane</TableCell>
-            </TableRow>
             {data.pages.map((page)=> {
               return (
                 page.items.map((row, index) => {
@@ -81,6 +111,11 @@ export const StockInsSection = () => {
             })}
           </TableBody>
         </Table>
+        <InfiniteScroll
+          hasNextPage={query.hasNextPage}
+          isFetchingNextPage={query.isFetchingNextPage}
+          fetchNextPage={query.fetchNextPage}
+        />
       </div>
     </div>
   )

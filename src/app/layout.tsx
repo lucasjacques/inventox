@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Share_Tech } from "next/font/google";
 import {
   ClerkProvider,
   SignInButton,
@@ -7,8 +8,9 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
-import { Share_Tech } from "next/font/google";
+
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 import { TRPCProvider } from "@/trpc/client";
 
 const shareTech = Share_Tech({weight: "400", subsets:["latin"]});
@@ -40,6 +42,7 @@ export default function RootLayout({
             </SignedIn>
           </header>
           <TRPCProvider>
+            <Toaster />
             {children}
           </TRPCProvider>
         </body>

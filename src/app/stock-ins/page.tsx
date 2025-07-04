@@ -1,6 +1,4 @@
-import { Suspense } from 'react';
 import { ClerkLoaded } from '@clerk/nextjs';
-import { ErrorBoundary } from 'react-error-boundary'
 
 import { DEFAULT_LIMIT } from '@/constants';
 import { HydrateClient, trpc } from "@/trpc/server";
@@ -14,13 +12,9 @@ export default async function Home() {
 
   return(
     <HydrateClient>
-      <Suspense fallback={<p>Loading...</p>}>
-        <ErrorBoundary fallback={<p>Error...</p>}>
-          <ClerkLoaded>
-            <StockInsView />
-          </ClerkLoaded>
-        </ErrorBoundary>
-      </Suspense>
+      <ClerkLoaded>
+        <StockInsView />
+      </ClerkLoaded>
     </HydrateClient>
   );
 }
