@@ -11,6 +11,7 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu"
+import { usePathname } from "next/navigation";
 
 const items = [
   {
@@ -19,12 +20,12 @@ const items = [
     auth: true
   },
   {
-    name: "Entrada",
+    name: "Entradas",
     url: "/stock-ins",
     auth: true
   },
   {
-    name: "Saída",
+    name: "Saídas",
     url: "/stock-outs",
     auth: true
   },
@@ -55,14 +56,17 @@ export const CommonNavbar = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 {items.map((item, index)=>{
+                  const isSelected = item.url === usePathname();
                   return (
                     <NavigationMenuItem key={index}>
-                      <Button onClick={(e)=>{
-                        if (!isSignedIn && item.auth ) {
-                          e.preventDefault();
-                          return clerk.openSignIn();
-                        }
-                      }}>
+                      <Button 
+                        variant={isSelected ? "outline" : "default" }
+                        onClick={(e)=>{
+                          if (!isSignedIn && item.auth ) {
+                            e.preventDefault();
+                            return clerk.openSignIn();
+                          }
+                        }}>
                         <Link href={item.url}>
                             <p className="p-4">{item.name}</p>
                         </Link>

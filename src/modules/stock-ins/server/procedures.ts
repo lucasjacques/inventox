@@ -50,10 +50,31 @@ export const stockInsRouter = createTRPCRouter({
         updatedAt: lastItem.stock_ins.updatedAt,
       }
       : null;
+      
+    const productsData = await db
+      .select()
+      .from(products);
 
     return {
       items,
-      nextCursor
+      productsData,
+      nextCursor,
+    };
+  }),
+  
+  create: protectedProcedure.mutation(async ({ ctx }) => {
+    const { id: userId } = ctx.user;
+
+    const [ stockIn ] = await db
+      .insert(stockIns)
+      .values({
+        userId,
+        productId: "3ba25a10-1285-4998-bcd3-f51dfdcc06ae",
+        value: 5
+      }).returning();
+    
+    return {
+      stockIn: stockIn,
     };
   }),
 })
