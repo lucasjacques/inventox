@@ -62,19 +62,24 @@ export const stockInsRouter = createTRPCRouter({
     };
   }),
   
-  create: protectedProcedure.mutation(async ({ ctx }) => {
-    const { id: userId } = ctx.user;
+  create: protectedProcedure
+    .input(z.object({
+      productId: z.string(),
+      value: z.number().nonnegative(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const { id: userId } = ctx.user;
 
-    const [ stockIn ] = await db
-      .insert(stockIns)
-      .values({
-        userId,
-        productId: "3ba25a10-1285-4998-bcd3-f51dfdcc06ae",
-        value: 5
-      }).returning();
-    
-    return {
-      stockIn: stockIn,
-    };
-  }),
+      const [ stockIn ] = await db
+        .insert(stockIns)
+        .values({
+          userId,
+          productId: input.productId,
+          value: input.value,
+        }).returning();
+      
+      return {
+        stockIn: stockIn,
+      };
+    }),
 })
