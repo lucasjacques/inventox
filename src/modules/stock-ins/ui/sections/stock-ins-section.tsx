@@ -2,7 +2,7 @@
 
 import { Loader2Icon, PlusIcon } from "lucide-react";
 import { toast } from "sonner";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { trpc } from "@/trpc/client";
@@ -46,9 +46,14 @@ const StockInsSectionSuspense = () => {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
+  const [productId, setProductId] = useState("");
+  const [stockInsValue, setStockInsValue] = useState<number | undefined>();
+
   const utils = trpc.useUtils();
   const create = trpc.stockIns.create.useMutation({
     onSuccess: () => {
+      setProductId("");
+      setStockInsValue(undefined);
       toast.success("Entrada criada com sucesso!");
       utils.stockIns.getMany.invalidate();
     },
@@ -61,7 +66,7 @@ const StockInsSectionSuspense = () => {
     <div>
       <div className="flex justify-center">
         <div className="m-4 flex w-[800px]">
-          <Select>
+          <Select onValueChange={(value) => setProductId(value)}>
             <SelectTrigger className="m-2">
               <SelectValue placeholder="Selecione um Produto" />
             </SelectTrigger>
@@ -75,9 +80,18 @@ const StockInsSectionSuspense = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Input  className="m-2" type="number" placeholder="Valor">
+          <Input className="m-2" type="number" placeholder="Valor" onChange={(e) => setStockInsValue(Number(e.target.value))}>
           </Input>
-          <Button className="m-2" onClick={() => create.mutate()} disabled={create.isPending}>
+          <Button 
+            className="m-2" 
+            disabled={create.isPending}
+            onClick={() => {
+              if( !productId || stockInsValue === undefined ) {
+                return;
+              }
+              create.mutate({productId: productId, value: stockInsValue})
+            }}
+            >
             {create.isPending ? <Loader2Icon className="animate-spin"/> : <PlusIcon />}
             Inserir nova entrada
           </Button>
