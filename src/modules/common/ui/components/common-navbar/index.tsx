@@ -30,8 +30,13 @@ const items = [
     auth: true
   },
   {
-    name: "Imprimir",
-    url: "/print",
+    name: "Produtos",
+    url: "/products",
+    auth: true
+  },
+  {
+    name: "Grupos",
+    url: "/groups",
     auth: true
   },
 ];
