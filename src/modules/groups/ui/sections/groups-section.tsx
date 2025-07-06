@@ -1,4 +1,14 @@
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+"use client";
+
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+
+import { trpc } from "@/trpc/client";
+import { DEFAULT_LIMIT } from "@/constants";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const groupsData = [
   {
@@ -25,25 +35,56 @@ const groupsData = [
 
 export const GroupsSection = () => {
   return (
-    <div className="pl-6">
-      <p>Bem vindo a tela de grupos!</p>
-      <Table>
-        <TableCaption></TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nome</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {groupsData.map((item) => {
-            return (
-            <TableRow>
-              <TableCell key={item.id}>{item.name}</TableCell>
-            </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
+    <Suspense fallback={<p>Loading...</p>}>
+        <ErrorBoundary fallback={<p>Error...</p>}>
+          <GroupsSectionSuspense />
+        </ErrorBoundary>
+    </Suspense>
+  )
+}
+
+
+const GroupsSectionSuspense = () => {
+  const [ data, query ] = trpc.groups.getMany.useSuspenseInfiniteQuery({
+    limit: DEFAULT_LIMIT,
+  }, {
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+  });
+
+  return (
+    <div>
+      <div className="flex justify-center">
+        <div className="m-4 flex w-[500px]">
+          <Input className="m-2" type="text" />
+          <Button className="m-2">Inserir novo grupo</Button>
+        </div>
+
+      </div>
+      <div className="flex justify-center">
+        <div className="m-4 flex w-[800px]">
+          <Table>
+            <TableCaption>
+              Lista de grupos atualizada
+            </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[200px]">Name</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.pages.flatMap((page) => page.items).map((items, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell>{items.name}</TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+      <div className="pl-6">
+      </div>
     </div>
   )
 }
