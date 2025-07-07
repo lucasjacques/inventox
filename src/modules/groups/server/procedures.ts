@@ -6,6 +6,34 @@ import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { and, desc, eq, lt, or } from "drizzle-orm";
 
 export const groupsRouter = createTRPCRouter({
+  create: protectedProcedure
+  .input(z.object({
+    groupName: z.string(),
+  }))
+  .mutation(async ({ input }) => {
+    const [ group ] = await db
+      .insert(groups)
+      .values({name: input.groupName})
+      .returning();
+    
+    return {
+      group: group,
+    };
+  }),
+  delete: protectedProcedure
+  .input(z.object({
+    id: z.string().uuid(),
+  }))
+  .mutation(async ({ input }) => {
+    const [ group ] = await db
+      .delete(groups)
+      .where(eq(groups.id, input.id))
+      .returning();
+
+    return {
+      group: group
+    };
+  }),
   getMany: protectedProcedure
   .input(z.object({
     cursor: z.object({
@@ -52,19 +80,4 @@ export const groupsRouter = createTRPCRouter({
       nextCursor,
     };
   }),
-  
-  create: protectedProcedure
-  .input(z.object({
-    groupName: z.string(),
-  }))
-  .mutation(async ({ input }) => {
-    const [ group ] = await db
-      .insert(groups)
-      .values({name: input.groupName})
-      .returning();
-    
-    return {
-      group: group,
-    };
-  })
 })

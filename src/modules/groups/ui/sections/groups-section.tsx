@@ -70,14 +70,15 @@ const GroupsSectionSuspense = () => {
 
       </div>
       <div className="flex justify-center">
-        <div className="m-4 flex w-[800px]">
+        <div className="m-4 flex w-[400px]">
           <Table>
             <TableCaption>
               Lista de grupos atualizada
             </TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[200px]">Nome</TableHead>
+                <TableHead>Nome</TableHead>
+                <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -85,6 +86,7 @@ const GroupsSectionSuspense = () => {
                 return (
                   <TableRow key={index}>
                     <TableCell>{items.name}</TableCell>
+                    <TableCell><Button variant={"destructive"}>Deletar</Button></TableCell>
                   </TableRow>
                 )
               })}
