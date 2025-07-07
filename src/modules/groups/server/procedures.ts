@@ -50,8 +50,9 @@ export const groupsRouter = createTRPCRouter({
     return {
       items,
       nextCursor,
-    }
+    };
   }),
+  
   create: protectedProcedure
   .input(z.object({
     groupName: z.string(),

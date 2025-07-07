@@ -97,36 +97,38 @@ const StockInsSectionSuspense = () => {
           </Button>
         </div>
       </div>
-      <div className="pl-6">
-        <Table>
-          <TableCaption>Lista do estoque atualizado</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[200px]">Data</TableHead>
-              <TableHead >Produto</TableHead>
-              <TableHead className="text-center w-[50px]">Quantidade</TableHead>
-              <TableHead className="text-center w-[150px]">Autor</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.pages.flatMap((page)=> page.items).map((row, index) => {
-                  return (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium">{row.stock_ins.createdAt.toLocaleString()}</TableCell>
-                    <TableCell >{row.products.name}</TableCell>
-                    <TableCell className="text-center">{row.stock_ins.value}</TableCell>
-                    <TableCell className="text-center">{row.users.name}</TableCell>
-                  </TableRow>
-                )
-              })
-            }
-          </TableBody>
-        </Table>
-        <InfiniteScroll
-          hasNextPage={query.hasNextPage}
-          isFetchingNextPage={query.isFetchingNextPage}
-          fetchNextPage={query.fetchNextPage}
-        />
+      <div className="flex justify-center">
+        <div>
+          <Table>
+            <TableCaption>Lista do estoque atualizado</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[200px]">Data</TableHead>
+                <TableHead >Produto</TableHead>
+                <TableHead className="text-center w-[50px]">Quantidade</TableHead>
+                <TableHead className="text-center w-[150px]">Autor</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.pages.flatMap((page)=> page.items).map((row, index) => {
+                    return (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium">{row.stock_ins.createdAt.toLocaleString()}</TableCell>
+                      <TableCell >{row.products.name}</TableCell>
+                      <TableCell className="text-center">{row.stock_ins.value}</TableCell>
+                      <TableCell className="text-center">{row.users.name}</TableCell>
+                    </TableRow>
+                  )
+                })
+              }
+            </TableBody>
+          </Table>
+          <InfiniteScroll
+            hasNextPage={query.hasNextPage}
+            isFetchingNextPage={query.isFetchingNextPage}
+            fetchNextPage={query.fetchNextPage}
+          />
+        </div>
       </div>
     </div>
   )
