@@ -76,7 +76,8 @@ export const stockInsRouter = createTRPCRouter({
           userId,
           productId: input.productId,
           value: input.value,
-        }).returning();
+        })
+        .returning();
       
       return {
         stockIn: stockIn,

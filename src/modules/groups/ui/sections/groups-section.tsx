@@ -12,29 +12,6 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Loader2Icon, PlusIcon } from "lucide-react";
 
-const groupsData = [
-  {
-    id: "123123123",
-    name: "Grupo1"
-  },
-  {
-    id: "123123124",
-    name: "Grupo2"
-  },
-  {
-    id: "123123125",
-    name: "Grupo3"
-  },
-  {
-    id: "123123126",
-    name: "Grupo4"
-  },
-  {
-    id: "123123127",
-    name: "Grupo5"
-  },
-]
-
 export const GroupsSection = () => {
   return (
     <Suspense fallback={<p>Loading...</p>}>
@@ -100,7 +77,7 @@ const GroupsSectionSuspense = () => {
             </TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[200px]">Name</TableHead>
+                <TableHead className="w-[200px]">Nome</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
