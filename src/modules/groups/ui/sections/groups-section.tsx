@@ -6,7 +6,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import { trpc } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -33,10 +32,19 @@ const GroupsSectionSuspense = () => {
   const [ groupName, setGroupName ] = useState("");
 
   const utils = trpc.useUtils();
-  const create = trpc.groups.create.useMutation({
+  const createGroup = trpc.groups.create.useMutation({
     onSuccess: () => {
       setGroupName("");
       toast.success("Grupo criado com sucesso!");
+      utils.groups.getMany.invalidate();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
+  })
+  const deleteGroup = trpc.groups.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Grupo removido com sucesso!");
       utils.groups.getMany.invalidate();
     },
     onError: (error) => {
@@ -47,37 +55,38 @@ const GroupsSectionSuspense = () => {
     <div>
       <div className="flex justify-center">
         <div className="m-4 flex w-[500px]">
-          <Input 
+          <Input
             className="m-2"
             type="text"
             placeholder="Escreva um nome para o grupo"
             onChange={(e) => setGroupName(e.target.value)}
           />
-          <Button 
+          <Button
             className="m-2"
-            disabled={create.isPending}
+            disabled={createGroup.isPending}
             onClick={ () => {
               if (groupName === "") {
                 return;
               }
-              create.mutate({groupName: groupName});
+              createGroup.mutate({groupName: groupName});
             }}
           >
-          {create.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
+          {createGroup.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
           Inserir novo grupo
           </Button>
         </div>
 
       </div>
       <div className="flex justify-center">
-        <div className="m-4 flex w-[800px]">
+        <div className="m-4 flex w-[400px]">
           <Table>
             <TableCaption>
               Lista de grupos atualizada
             </TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[200px]">Nome</TableHead>
+                <TableHead>Nome</TableHead>
+                <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -85,6 +94,11 @@ const GroupsSectionSuspense = () => {
                 return (
                   <TableRow key={index}>
                     <TableCell>{items.name}</TableCell>
+                    <TableCell>
+                      <Button variant={"destructive"} onClick={() => { deleteGroup.mutate({ id: items.id })}}>
+                        Deletar
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 )
               })}
