@@ -34,6 +34,24 @@ export const groupsRouter = createTRPCRouter({
       group: group
     };
   }),
+  update: protectedProcedure
+  .input(z.object({
+    id: z.string().uuid(),
+    name: z.string(),
+  }))
+  .mutation(async ({ input }) => {
+    const [ group ] = await db
+      .update(groups)
+      .set({
+        name: input.name
+      })
+      .where(eq(groups.id, input.id))
+      .returning();
+
+    return {
+      group: group,
+    }
+  }),
   getMany: protectedProcedure
   .input(z.object({
     cursor: z.object({
