@@ -1,15 +1,34 @@
 "use client";
 
+import { toast } from "sonner";
 import { Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { Loader2Icon, PlusIcon, XIcon } from "lucide-react";
 
 import { trpc } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { Loader2Icon, PlusIcon } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog";
 
 export const GroupsSection = () => {
   return (
@@ -54,28 +73,41 @@ const GroupsSectionSuspense = () => {
   return (
     <div>
       <div className="flex justify-center">
-        <div className="m-4 flex w-[500px]">
-          <Input
-            className="m-2"
-            type="text"
-            placeholder="Escreva um nome para o grupo"
-            onChange={(e) => setGroupName(e.target.value)}
-          />
-          <Button
-            className="m-2"
-            disabled={createGroup.isPending}
-            onClick={ () => {
-              if (groupName === "") {
-                return;
-              }
-              createGroup.mutate({groupName: groupName});
-            }}
-          >
-          {createGroup.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
-          Inserir novo grupo
-          </Button>
-        </div>
-
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="blue">Adicionar Grupo</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[350px]">
+            <DialogHeader>
+              <DialogTitle>Criação de Grupo</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4">
+              <Label >Nome:</Label>
+              <Input
+                type="text"
+                placeholder="Escreva um nome para o grupo"
+                onChange={(e) => setGroupName(e.target.value)}
+              />
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancelar</Button>
+              </DialogClose>
+              <Button
+                disabled={createGroup.isPending}
+                onClick={ () => {
+                  if (groupName === "") {
+                    return;
+                  }
+                  createGroup.mutate({groupName: groupName});
+                }}
+                >
+              {createGroup.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
+                Adicionar
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="flex justify-center">
         <div className="m-4 flex w-[400px]">
