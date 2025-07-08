@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 import { Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { Loader2Icon, PlusIcon, XIcon } from "lucide-react";
+import { Loader2Icon, PencilIcon, PlusIcon, XIcon } from "lucide-react";
 
 import { trpc } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
@@ -48,12 +48,13 @@ const GroupsSectionSuspense = () => {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  const [ groupName, setGroupName ] = useState("");
+  const [ newGroupName, setNewGroupName ] = useState("");
+  const [ editGroupName, setEditGroupName ] = useState("");
 
   const utils = trpc.useUtils();
   const createGroup = trpc.groups.create.useMutation({
     onSuccess: () => {
-      setGroupName("");
+      setNewGroupName("");
       toast.success("Grupo criado com sucesso!");
       utils.groups.getMany.invalidate();
     },
@@ -70,23 +71,30 @@ const GroupsSectionSuspense = () => {
       toast.error(error.message);
     }
   })
+  const updateGroup = trpc.groups.update.useMutation({
+    onSuccess: () => {
+      toast.success("Grupo editado com sucesso!");
+      utils.groups.getMany.invalidate();
+    }
+  })
+
   return (
     <div>
       <div className="flex justify-center">
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="blue">Adicionar Grupo</Button>
+            <Button variant="blue">Adicionar Novo Grupo</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[350px]">
             <DialogHeader>
               <DialogTitle>Criação de Grupo</DialogTitle>
             </DialogHeader>
-            <div className="grid gap-4">
-              <Label >Nome:</Label>
+            <div className="flex flex-col gap-3">
+              <Label>Nome:</Label>
               <Input
                 type="text"
                 placeholder="Escreva um nome para o grupo"
-                onChange={(e) => setGroupName(e.target.value)}
+                onChange={(e) => setNewGroupName(e.target.value)}
               />
             </div>
             <DialogFooter>
@@ -96,13 +104,13 @@ const GroupsSectionSuspense = () => {
               <Button
                 disabled={createGroup.isPending}
                 onClick={ () => {
-                  if (groupName === "") {
+                  if (newGroupName === "") {
                     return;
                   }
-                  createGroup.mutate({groupName: groupName});
+                  createGroup.mutate({groupName: newGroupName});
                 }}
                 >
-              {createGroup.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
+                  {createGroup.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
                 Adicionar
               </Button>
             </DialogFooter>
@@ -127,9 +135,49 @@ const GroupsSectionSuspense = () => {
                   <TableRow key={index}>
                     <TableCell>{items.name}</TableCell>
                     <TableCell>
-                      <Button variant={"destructive"} onClick={() => { deleteGroup.mutate({ id: items.id })}}>
-                        Deletar
-                      </Button>
+                      <div className="flex gap-3">
+                        <Dialog>
+                          <DialogTrigger>
+                            <Button variant="blue" title="Editar Grupo">
+                              <PencilIcon />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[350px]">
+                            <DialogHeader>
+                                <DialogTitle>Edição do Grupo: {items.name}</DialogTitle>
+                            </DialogHeader>
+                            <div className="flex flex-col gap-3">
+                              <Label>Nome:</Label>
+                              <Input
+                                type="text"
+                                placeholder="Escreve um nome para o grupo"
+                                onChange={(e) => setEditGroupName(e.target.value)}
+                              />
+                            </div>
+                            <DialogFooter>
+                              <DialogClose asChild>
+                                <Button variant="outline">Cancelar</Button>
+                              </DialogClose>
+                              <Button onClick={() => {
+                                if (!editGroupName) {
+                                  return;
+                                }
+                                updateGroup.mutate({ id: items.id, name: editGroupName });
+                              }}>
+                                {updateGroup.isPending ? <Loader2Icon className="animate-spin"/> : <PencilIcon />}
+                                Editar
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                        <Dialog>
+                          <DialogTrigger>
+                            <Button variant="destructive" title="Deletar Grupo" onClick={() => { deleteGroup.mutate({ id: items.id })}}>
+                              <XIcon />
+                            </Button>
+                          </DialogTrigger>
+                        </Dialog>
+                      </div>
                     </TableCell>
                   </TableRow>
                 )
