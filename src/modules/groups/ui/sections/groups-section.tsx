@@ -23,12 +23,12 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
+import { ActionsTable } from "@/components/actions-table";
 
 export const GroupsSection = () => {
   return (
@@ -39,7 +39,6 @@ export const GroupsSection = () => {
     </Suspense>
   )
 }
-
 
 const GroupsSectionSuspense = () => {
   const [ data, query ] = trpc.groups.getMany.useSuspenseInfiniteQuery({
@@ -118,7 +117,7 @@ const GroupsSectionSuspense = () => {
         </Dialog>
       </div>
       <div className="flex justify-center">
-        <div className="m-4 flex w-[400px]">
+        <div className="m-4 flex w-[800px]">
           <Table>
             <TableCaption>
               Lista de grupos atualizada
@@ -184,6 +183,12 @@ const GroupsSectionSuspense = () => {
               })}
             </TableBody>
           </Table>
+          <ActionsTable
+            columns={["Nome", "Produtos", "Quantidade"]}
+            editValues={[editGroupName]}
+            editOnChange={setEditGroupName}
+            editEntity={updateGroup}
+          />
         </div>
       </div>
       <div className="pl-6">
