@@ -15,47 +15,23 @@ import { Input } from "./ui/input";
 import { Dispatch, SetStateAction } from "react";
 import { trpc } from "@/trpc/client";
 
-type ActionsTableProps = {
-  columns: string[],
-  editValues: string[],
-  editOnChange: Dispatch<SetStateAction<string>>,
-  editEntity: ReturnType<typeof trpc.groups.update.useMutation>,
+type ActionsTableProps<T extends object> = {
+  data: T[];
+  getName: (row: T) => string;
+  headers: string[];
+  editEntity: ReturnType<typeof trpc.groups.update.useMutation>;
+  editValues: string[];
+  editOnChange: Dispatch<SetStateAction<string>>;
 }
 
-const data = [ 
-  {
-    name: "Grupo 1",
-    products: "Produto 11",
-    quantity: 6,
-  }, 
-  {
-    name: "Grupo 2",
-    products: "Produto 12",
-    quantity: 7,
-  }, 
-  {
-    name: "Grupo 3",
-    products: "Produto 13",
-    quantity: 8,
-  }, 
-  {
-    name: "Grupo 4",
-    products: "Produto 14",
-    quantity: 9,
-  }, 
-  {
-    name: "Grupo 5",
-    products: "Produto 15",
-    quantity: 10,
-  }, 
-]
-
-export const ActionsTable = ({
-    columns,
-    editOnChange,
-    editValues,
+export function ActionsTable<T extends object> ({
+    data,
+    getName,
+    headers,
     editEntity,
-  }: ActionsTableProps) => {
+    editValues,
+    editOnChange,
+  }: ActionsTableProps<T>) {
   
   return (
     <Table>
@@ -64,21 +40,22 @@ export const ActionsTable = ({
       </TableCaption>
       <TableHeader>
         <TableRow>
-          {columns.map((key) => {
+          {headers.map((header) => {
             return (
-              <TableHead>{String(key)}</TableHead>
+              <TableHead>{String(header)}</TableHead>
             )
           })}
           <TableHead>Ações</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((items, index) => {
+        {data.map((row, index) => {
+          const columns = Object.keys(row) as Array<keyof T>;
           return (
             <TableRow key={index}>
-              {columns.map(() => {
+              {columns.map((cell, index2) => {
                 return (
-                  <TableCell>{items.name}</TableCell>
+                  <TableCell key={index2}>{String(row[cell])}</TableCell>
                 )
               })}
               <TableCell>
@@ -91,7 +68,7 @@ export const ActionsTable = ({
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[350px]">
                       <DialogHeader>
-                          <DialogTitle>Edição do Grupo: {items.name}</DialogTitle>
+                          <DialogTitle>Edição do Grupo: {getName(row)}</DialogTitle>
                       </DialogHeader>
                       <div className="flex flex-col gap-3">
                         <Label>Nome:</Label>
@@ -110,7 +87,7 @@ export const ActionsTable = ({
                           //   if (!editValues[0]) {
                           //     return;
                           //   }
-                          //   editEntity.mutate({ id: items.id, name: editValues[0] });
+                          //   editEntity.mutate({ id: row.id, name: editValues[0] });
                           // }}
                         >
                           {/* {updateGroup.isPending ? <Loader2Icon className="animate-spin"/> : <PencilIcon />} */}
@@ -120,7 +97,7 @@ export const ActionsTable = ({
                     </DialogContent>
                   </Dialog>
                   <Button variant="destructive" title="Excluir Item" 
-                    // onClick={() => { deleteGroup.mutate({ id: items.id })}}
+                    // onClick={() => { deleteGroup.mutate({ id: row.id })}}
                   >
                         <XIcon />
                   </Button>

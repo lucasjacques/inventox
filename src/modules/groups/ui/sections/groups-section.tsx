@@ -77,6 +77,34 @@ const GroupsSectionSuspense = () => {
     }
   })
 
+  const mockData = [ 
+    {
+      name: "Grupo 1",
+      products: "Produto 11",
+      quantity: 6,
+    }, 
+    {
+      name: "Grupo 2",
+      products: "Produto 12",
+      quantity: 7,
+    }, 
+    {
+      name: "Grupo 3",
+      products: "Produto 13",
+      quantity: 8,
+    }, 
+    {
+      name: "Grupo 4",
+      products: "Produto 14",
+      quantity: 9,
+    }, 
+    {
+      name: "Grupo 5",
+      products: "Produto 15",
+      quantity: 10,
+    }, 
+  ]
+
   return (
     <div>
       <div className="flex justify-center">
@@ -184,7 +212,8 @@ const GroupsSectionSuspense = () => {
             </TableBody>
           </Table>
           <ActionsTable
-            columns={["Nome", "Produtos", "Quantidade"]}
+            data={mockData}
+            headers={["Nome", "Produtos", "Quantidade"]}
             editValues={[editGroupName]}
             editOnChange={setEditGroupName}
             editEntity={updateGroup}
