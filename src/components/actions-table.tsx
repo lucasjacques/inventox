@@ -1,4 +1,4 @@
-import { PencilIcon, XIcon } from "lucide-react";
+import { Loader2Icon, PencilIcon, XIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import {
@@ -12,37 +12,41 @@ import {
 } from "./ui/table";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, MouseEventHandler, SetStateAction } from "react";
 import { trpc } from "@/trpc/client";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 type ActionsTableProps<T extends object> = {
   data: T[];
-  getName: (row: T) => string;
+  onEdit: (item: T) => void;
+  getName: (item: T) => string;
   headers: string[];
-  editEntity: ReturnType<typeof trpc.groups.update.useMutation>;
-  editValues: string[];
-  editOnChange: Dispatch<SetStateAction<string>>;
+  onDelete: (item: T) => void;
+  getColumns: (item: T) => string[];
+  editMutation: { isPending: boolean };
+  editOnChange: (s: string) => void;
+  deleteMutation: { isPending: boolean }
 }
 
 export function ActionsTable<T extends object> ({
     data,
+    onEdit,
     getName,
     headers,
-    editEntity,
-    editValues,
+    onDelete,
+    getColumns,
+    editMutation,
     editOnChange,
+    deleteMutation,
   }: ActionsTableProps<T>) {
   
   return (
     <Table>
-      <TableCaption>
-        Lista de grupos atualizada
-      </TableCaption>
       <TableHeader>
         <TableRow>
           {headers.map((header) => {
             return (
-              <TableHead>{String(header)}</TableHead>
+              <TableHead>{header}</TableHead>
             )
           })}
           <TableHead>Ações</TableHead>
@@ -53,9 +57,9 @@ export function ActionsTable<T extends object> ({
           const columns = Object.keys(row) as Array<keyof T>;
           return (
             <TableRow key={index}>
-              {columns.map((cell, index2) => {
+              {getColumns(row).map((cell, index2) => {
                 return (
-                  <TableCell key={index2}>{String(row[cell])}</TableCell>
+                  <TableCell key={index2}>{String(cell)}</TableCell>
                 )
               })}
               <TableCell>
@@ -68,13 +72,13 @@ export function ActionsTable<T extends object> ({
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[350px]">
                       <DialogHeader>
-                          <DialogTitle>Edição do Grupo: {getName(row)}</DialogTitle>
+                          <DialogTitle>Edição do Item: {getName(row)}</DialogTitle>
                       </DialogHeader>
                       <div className="flex flex-col gap-3">
                         <Label>Nome:</Label>
                         <Input
                           type="text"
-                          placeholder="Escreva um nome para o grupo"
+                          placeholder="Escreva aqui o nome do item"
                           onChange={(e) => editOnChange(e.target.value)}
                         />
                       </div>
@@ -82,25 +86,42 @@ export function ActionsTable<T extends object> ({
                         <DialogClose asChild>
                           <Button variant="outline">Cancelar</Button>
                         </DialogClose>
-                        <Button 
-                          // onClick={() => {
-                          //   if (!editValues[0]) {
-                          //     return;
-                          //   }
-                          //   editEntity.mutate({ id: row.id, name: editValues[0] });
-                          // }}
+                        <Button variant="blue" onClick={() => onEdit(row)}
                         >
-                          {/* {updateGroup.isPending ? <Loader2Icon className="animate-spin"/> : <PencilIcon />} */}
+                          {editMutation.isPending ? <Loader2Icon className="animate-spin"/> : <PencilIcon />}
                           Editar
                         </Button>
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
-                  <Button variant="destructive" title="Excluir Item" 
-                    // onClick={() => { deleteGroup.mutate({ id: row.id })}}
-                  >
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant="destructive" title="Excluir Item">
                         <XIcon />
-                  </Button>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>
+                          Exclusão de item: {getName(row)}
+                        </DialogTitle>
+                      </DialogHeader>
+                      <DialogDescription>
+                        Você tem certeza que deseja excluir o item em questão?
+                      </DialogDescription>
+                      <DialogFooter>
+                        <DialogClose asChild>
+                          <Button variant="outline">Cancelar</Button>
+                        </DialogClose>
+                        <DialogClose asChild>
+                          <Button variant="destructive" onClick={() => onDelete(row)}>
+                            {deleteMutation.isPending ? <Loader2Icon className="animate-spin"/> : <XIcon />}
+                            Excluir
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </TableCell>
             </TableRow>

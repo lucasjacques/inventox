@@ -116,107 +116,56 @@ const GroupsSectionSuspense = () => {
             <DialogHeader>
               <DialogTitle>Criação de Grupo</DialogTitle>
             </DialogHeader>
-            <div className="flex flex-col gap-3">
-              <Label>Nome:</Label>
-              <Input
-                type="text"
-                placeholder="Escreva um nome para o grupo"
-                onChange={(e) => setNewGroupName(e.target.value)}
-              />
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancelar</Button>
-              </DialogClose>
-              <Button
-                disabled={createGroup.isPending}
-                onClick={ () => {
+            <form
+              className="flex flex-col gap-3"
+              onSubmit={(e) => {
+                  e.preventDefault();
                   if (newGroupName === "") {
                     return;
                   }
                   createGroup.mutate({groupName: newGroupName});
-                }}
-                >
-                  {createGroup.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
-                Adicionar
-              </Button>
-            </DialogFooter>
+                }}>
+              <div className="flex flex-col gap-3">
+                <Label>Nome:</Label>
+                <Input
+                  type="text"
+                  placeholder="Escreva um nome para o grupo"
+                  onChange={(e) => setNewGroupName(e.target.value)}
+                />
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancelar</Button>
+                </DialogClose>
+                <Button
+                  variant="blue"
+                  disabled={createGroup.isPending}
+                  >
+                    {createGroup.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
+                  Adicionar
+                </Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
       <div className="flex justify-center">
-        <div className="m-4 flex w-[800px]">
-          <Table>
-            <TableCaption>
-              Lista de grupos atualizada
-            </TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.pages.flatMap((page) => page.items).map((items, index) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell>{items.name}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-3">
-                        <Dialog>
-                          <DialogTrigger>
-                            <Button variant="blue" title="Editar Grupo">
-                              <PencilIcon />
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[350px]">
-                            <DialogHeader>
-                                <DialogTitle>Edição do Grupo: {items.name}</DialogTitle>
-                            </DialogHeader>
-                            <div className="flex flex-col gap-3">
-                              <Label>Nome:</Label>
-                              <Input
-                                type="text"
-                                placeholder="Escreve um nome para o grupo"
-                                onChange={(e) => setEditGroupName(e.target.value)}
-                              />
-                            </div>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button variant="outline">Cancelar</Button>
-                              </DialogClose>
-                              <Button onClick={() => {
-                                if (!editGroupName) {
-                                  return;
-                                }
-                                updateGroup.mutate({ id: items.id, name: editGroupName });
-                              }}>
-                                {updateGroup.isPending ? <Loader2Icon className="animate-spin"/> : <PencilIcon />}
-                                Editar
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                        <Dialog>
-                          <DialogTrigger>
-                            <Button variant="destructive" title="Deletar Grupo" onClick={() => { deleteGroup.mutate({ id: items.id })}}>
-                              <XIcon />
-                            </Button>
-                          </DialogTrigger>
-                        </Dialog>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
+        <div className="m-4 flex">
           <ActionsTable
-            data={mockData}
-            headers={["Nome", "Produtos", "Quantidade"]}
-            editValues={[editGroupName]}
+            data={data.pages.flatMap((page) => page.items)}
+            onEdit={(item) => {
+              if (!editGroupName) {
+                return;
+              }
+              updateGroup.mutate({ id: item.id, name: editGroupName });
+            }}
+            getName={(item) => item.name}
+            headers={["Nome"]}
+            onDelete={(item) => { deleteGroup.mutate({ id: item.id })}}
+            getColumns={(item) => [item.name]}
+            editMutation={updateGroup}
             editOnChange={setEditGroupName}
-            editEntity={updateGroup}
+            deleteMutation={deleteGroup}
           />
         </div>
       </div>
