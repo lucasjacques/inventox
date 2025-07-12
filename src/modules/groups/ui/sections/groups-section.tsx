@@ -28,7 +28,9 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
-import { ActionsTable } from "@/components/actions-table";
+import { GenericTable } from "@/components/generic-table";
+import { EditGroupDialog } from "../dialogs/edit-group-dialog";
+import { DeleteGroupDialog } from "../dialogs/delete-group-dialog";
 
 export const GroupsSection = () => {
   return (
@@ -127,27 +129,42 @@ const GroupsSectionSuspense = () => {
       </div>
       <div className="flex justify-center">
         <div className="m-4 flex">
-          <ActionsTable
+          <GenericTable
             data={data.pages.flatMap((page) => page.items)}
             getId={(item) => item.id}
-            onEdit={(item) => {
-              if (!editGroupName) {
-                return;
-              }
-              updateGroup.mutate({ id: item.id, name: editGroupName });
-            }}
-            getName={(item) => item.name}
+            // onEdit={}
+            // getName={(item) => item.name}
             headers={["Nome"]}
-            onDelete={(item) => { deleteGroup.mutate({ id: item.id })}}
+            // onDelete={(item) => { deleteGroup.mutate({ id: item.id })}}
             getColumns={(item) => [item.name]}
-            editMutation={updateGroup}
-            deleteMutation={deleteGroup}
-            dialogEditInputs={[{
-              label: 'Nome',
-              type: 'text',
-              placeholder: 'Escreva aqui o nome do Grupo',
-              onChange: setEditGroupName,
-            }]}
+            // editMutation={updateGroup}
+            // deleteMutation={deleteGroup}
+            // dialogEditInputs={[{
+            //   label: 'Nome',
+            //   type: 'text',
+            //   placeholder: 'Escreva aqui o nome do Grupo',
+            //   onChange: setEditGroupName,
+            // }]}
+            renderRowActions={(group) => (
+              <div className="flex gap-3"> 
+                <EditGroupDialog 
+                  group={group}
+                  onEdit={(item) => {
+                    if (!editGroupName) {
+                      return;
+                    }
+                    updateGroup.mutate({ id: item.id, name: editGroupName });
+                  }}
+                  onChange={setEditGroupName}
+                  editMutation={updateGroup}
+                />
+                <DeleteGroupDialog
+                  group={group}
+                  onDelete={(item) => { deleteGroup.mutate({ id: item.id })}}
+                  deleteMutation={deleteGroup}
+                />
+              </div>
+            )}
           />
         </div>
       </div>

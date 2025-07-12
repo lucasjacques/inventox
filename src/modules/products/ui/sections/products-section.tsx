@@ -26,7 +26,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import { ActionsTable } from "@/components/actions-table";
+import { GenericTable } from "@/components/generic-table";
 
 export const ProductsSection = () => {
   return (
@@ -127,34 +127,48 @@ const ProductsSectionSuspense = () => {
       </div>
       <div className="flex justify-center">
         <div>
-          {/* <ActionsTable
+          <GenericTable
             data={data.pages.flatMap((page) => page.items.map((item) => { 
               return {
                 id: item.products.id, 
                 name: item.products.name, 
                 groupName: item.groups.name,
               }
-            }))} 
-            onEdit = {(item) => {
-              if (!editProductName) {
-                return;
-              }
-              updateProduct.mutate({ id: item.id, name: editProductName, groupId: editProductGroupId });
-            }}
-            getName = {(item) => item.name}
+            }))}
+            getId = {(item) => item.id}
+            // onEdit = {(item) => {
+            //   if (!editProductName) {
+            //     return;
+            //   }
+            //   updateProduct.mutate({ id: item.id, name: editProductName, groupId: editProductGroupId });
+            // }}
+            // getName = {(item) => item.name}
             headers = {["Nome", "Grupo"]}
-            onDelete = {(item) => {
-              deleteProduct.mutate({ id: item.id })
-            }}
+            // onDelete = {(item) => {
+            //   deleteProduct.mutate({ id: item.id })
+            // }}
             getColumns = {(item) => [
               item.name,
               item.groupName
             ]}
-            editMutation = {updateProduct}
-            editOnChange = {}
-            // deleteMutation,
-          /> */}
-          <Table>
+            // editMutation = {updateProduct}
+            // deleteMutation={deleteProduct}
+            // dialogEditInputs={[
+            //   { 
+            //     label: "Nome",
+            //     type: "text",
+            //     placeholder: "Escreva aqui o nome do Produto",
+            //     onChange: setEditProductName,
+            //   },
+            //   { 
+            //     label: "Grupo",
+            //     type: "text",
+            //     placeholder: "Selecione o nome do Grupo",
+            //     onChange: setEditProductGroupId,
+            //   },
+            // ]}
+          />
+          {/* <Table>
             <TableCaption>
               Lista de produtos atualizada
             </TableCaption>
@@ -174,7 +188,7 @@ const ProductsSectionSuspense = () => {
                 )
               })}
             </TableBody>
-          </Table>
+          </Table> */}
         </div>
       </div>
     </div>
