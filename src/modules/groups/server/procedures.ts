@@ -48,9 +48,7 @@ export const groupsRouter = createTRPCRouter({
       .where(eq(groups.id, input.id))
       .returning();
 
-    return {
-      group: group,
-    }
+    return { group }
   }),
   getMany: protectedProcedure
   .input(z.object({

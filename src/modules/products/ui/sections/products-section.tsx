@@ -1,15 +1,32 @@
 'use client';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { DEFAULT_LIMIT } from "@/constants"
-import { trpc } from "@/trpc/client"
-import { Loader2Icon, PlusIcon } from "lucide-react";
-import { Suspense, useState } from "react"
-import { ErrorBoundary } from "react-error-boundary"
 import { toast } from "sonner";
+import { ErrorBoundary } from "react-error-boundary"
+import { Suspense, useState } from "react"
+import { Loader2Icon, PlusIcon } from "lucide-react";
+
+import { trpc } from "@/trpc/client"
+import { DEFAULT_LIMIT } from "@/constants"
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { 
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/components/ui/table"
+import { GenericTable } from "@/components/generic-table";
 
 export const ProductsSection = () => {
   return (
@@ -28,16 +45,44 @@ const ProductsSectionSuspense = () => {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  const [ groupId, setGroupId ] = useState("");
-  const [ productName, setProductName ] = useState("");
+  const [ newProductName, setNewProductName ] = useState("");
+  const [ newProductGroupId, setNewProductGroupId ] = useState("");
+
+  const [ editProductName, setEditProductName ] = useState("");
+  const [ editProductGroupId, setEditProductGroupId ] = useState("");
 
   const utils = trpc.useUtils();
-  const create = trpc.products.create.useMutation({
+  const createProduct = trpc.products.create.useMutation({
     onSuccess: () => {
-      setGroupId("");
-      setProductName("");
+      setNewProductGroupId("");
+      setNewProductName("");
       toast.success("Produto criado com sucesso!")
       utils.products.getMany.invalidate();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
+  })
+
+  const deleteProduct = trpc.products.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Produto excluído com sucesso!");
+      utils.products.getMany.invalidate();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
+  })
+
+  const updateProduct = trpc.products.update.useMutation({
+    onSuccess: () => {
+      setEditProductName("");
+      setEditProductGroupId("");
+      toast.success("Produto editado com sucesso!")
+      utils.products.getMany.invalidate();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     }
   })
 
@@ -45,7 +90,7 @@ const ProductsSectionSuspense = () => {
     <div>
       <div className="flex justify-center">
         <div className="flex">
-          <Select onValueChange={(value) => setGroupId(value)}>
+          <Select onValueChange={(value) => setNewProductGroupId(value)}>
             <SelectTrigger className="m-2 w-[200px]" >
               <SelectValue placeholder="Selecione um grupo" />
             </SelectTrigger>
@@ -63,26 +108,67 @@ const ProductsSectionSuspense = () => {
             className="m-2 w-[300px]"
             type="text"
             placeholder="Nome do produto"
-            onChange={(e) => setProductName(e.target.value)} 
+            onChange={(e) => setNewProductName(e.target.value)} 
           />
           <Button
             className="m-2"
-            disabled={create.isPending}
+            disabled={createProduct.isPending}
             onClick={() => {
-              if ( !groupId || productName === "") {
+              if ( !newProductGroupId || newProductName === "") {
                 return;
               }
-              create.mutate({groupId: groupId, name: productName})
+              createProduct.mutate({groupId: newProductGroupId, name: newProductName})
             }}
           >
-          {create.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
+          {createProduct.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
           Inserir novo Produto
           </Button>
           </div>
       </div>
       <div className="flex justify-center">
         <div>
-          <Table>
+          <GenericTable
+            data={data.pages.flatMap((page) => page.items.map((item) => { 
+              return {
+                id: item.products.id, 
+                name: item.products.name, 
+                groupName: item.groups.name,
+              }
+            }))}
+            getId = {(item) => item.id}
+            // onEdit = {(item) => {
+            //   if (!editProductName) {
+            //     return;
+            //   }
+            //   updateProduct.mutate({ id: item.id, name: editProductName, groupId: editProductGroupId });
+            // }}
+            // getName = {(item) => item.name}
+            headers = {["Nome", "Grupo"]}
+            // onDelete = {(item) => {
+            //   deleteProduct.mutate({ id: item.id })
+            // }}
+            getColumns = {(item) => [
+              item.name,
+              item.groupName
+            ]}
+            // editMutation = {updateProduct}
+            // deleteMutation={deleteProduct}
+            // dialogEditInputs={[
+            //   { 
+            //     label: "Nome",
+            //     type: "text",
+            //     placeholder: "Escreva aqui o nome do Produto",
+            //     onChange: setEditProductName,
+            //   },
+            //   { 
+            //     label: "Grupo",
+            //     type: "text",
+            //     placeholder: "Selecione o nome do Grupo",
+            //     onChange: setEditProductGroupId,
+            //   },
+            // ]}
+          />
+          {/* <Table>
             <TableCaption>
               Lista de produtos atualizada
             </TableCaption>
@@ -93,16 +179,16 @@ const ProductsSectionSuspense = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.pages.flatMap(page => page.items).map((item) => {
+              {data.pages.flatMap(page => page.items).map((item, index) => {
                 return (
-                  <TableRow>
+                  <TableRow key={index}>
                     <TableCell>{item.products.name}</TableCell>
                     <TableCell>{item.groups.name}</TableCell>
                   </TableRow>
                 )
               })}
             </TableBody>
-          </Table>
+          </Table> */}
         </div>
       </div>
     </div>
