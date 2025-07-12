@@ -15,28 +15,36 @@ import { Input } from "./ui/input";
 import { Dispatch, MouseEventHandler, SetStateAction } from "react";
 import { trpc } from "@/trpc/client";
 import { DialogDescription } from "@radix-ui/react-dialog";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 type ActionsTableProps<T extends object> = {
   data: T[];
+  getId: (item: T) => string;
   onEdit: (item: T) => void;
   getName: (item: T) => string;
   headers: string[];
   onDelete: (item: T) => void;
+  dialogEditInputs: { 
+    label: string;
+    type: string;
+    placeholder: string;
+    onChange: (s: string) => void;
+  }[];
   getColumns: (item: T) => string[];
   editMutation: { isPending: boolean };
-  editOnChange: (s: string) => void;
   deleteMutation: { isPending: boolean }
 }
 
 export function ActionsTable<T extends object> ({
     data,
+    getId,
     onEdit,
     getName,
     headers,
     onDelete,
+    dialogEditInputs,
     getColumns,
     editMutation,
-    editOnChange,
     deleteMutation,
   }: ActionsTableProps<T>) {
   
@@ -44,9 +52,9 @@ export function ActionsTable<T extends object> ({
     <Table>
       <TableHeader>
         <TableRow>
-          {headers.map((header) => {
+          {headers.map((header, index) => {
             return (
-              <TableHead>{header}</TableHead>
+              <TableHead key={index} >{header}</TableHead>
             )
           })}
           <TableHead>Ações</TableHead>
@@ -59,13 +67,13 @@ export function ActionsTable<T extends object> ({
             <TableRow key={index}>
               {getColumns(row).map((cell, index2) => {
                 return (
-                  <TableCell key={index2}>{String(cell)}</TableCell>
+                  <TableCell key={getId(row)}>{String(cell)}</TableCell>
                 )
               })}
               <TableCell>
                 <div className="flex gap-3">
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                       <Button variant="blue" title="Editar Item">
                         <PencilIcon />
                       </Button>
@@ -75,27 +83,35 @@ export function ActionsTable<T extends object> ({
                           <DialogTitle>Edição do Item: {getName(row)}</DialogTitle>
                       </DialogHeader>
                       <div className="flex flex-col gap-3">
-                        <Label>Nome:</Label>
-                        <Input
-                          type="text"
-                          placeholder="Escreva aqui o nome do item"
-                          onChange={(e) => editOnChange(e.target.value)}
-                        />
+                        {dialogEditInputs.map((inputs, index3)=>{
+                          return (
+                            <div key={index3}>
+                              <Label>{capitalizeFirstLetter(inputs.label)}</Label>
+                              <Input
+                                type={inputs.type}
+                                placeholder={inputs.placeholder}
+                                onChange={(e) => inputs.onChange(e.target.value)}
+                                />
+                            </div> 
+                          )
+                        })}
                       </div>
                       <DialogFooter>
                         <DialogClose asChild>
                           <Button variant="outline">Cancelar</Button>
                         </DialogClose>
-                        <Button variant="blue" onClick={() => onEdit(row)}
-                        >
-                          {editMutation.isPending ? <Loader2Icon className="animate-spin"/> : <PencilIcon />}
-                          Editar
-                        </Button>
+                        <DialogClose asChild>
+                          <Button variant="blue" onClick={() => onEdit(row)}
+                          >
+                            {editMutation.isPending ? <Loader2Icon className="animate-spin"/> : <PencilIcon />}
+                            Editar
+                          </Button>
+                        </DialogClose>
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                       <Button variant="destructive" title="Excluir Item">
                         <XIcon />
                       </Button>

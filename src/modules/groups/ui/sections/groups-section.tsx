@@ -72,38 +72,14 @@ const GroupsSectionSuspense = () => {
   })
   const updateGroup = trpc.groups.update.useMutation({
     onSuccess: () => {
+      setEditGroupName("");
       toast.success("Grupo editado com sucesso!");
       utils.groups.getMany.invalidate();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     }
   })
-
-  const mockData = [ 
-    {
-      name: "Grupo 1",
-      products: "Produto 11",
-      quantity: 6,
-    }, 
-    {
-      name: "Grupo 2",
-      products: "Produto 12",
-      quantity: 7,
-    }, 
-    {
-      name: "Grupo 3",
-      products: "Produto 13",
-      quantity: 8,
-    }, 
-    {
-      name: "Grupo 4",
-      products: "Produto 14",
-      quantity: 9,
-    }, 
-    {
-      name: "Grupo 5",
-      products: "Produto 15",
-      quantity: 10,
-    }, 
-  ]
 
   return (
     <div>
@@ -153,6 +129,7 @@ const GroupsSectionSuspense = () => {
         <div className="m-4 flex">
           <ActionsTable
             data={data.pages.flatMap((page) => page.items)}
+            getId={(item) => item.id}
             onEdit={(item) => {
               if (!editGroupName) {
                 return;
@@ -164,8 +141,13 @@ const GroupsSectionSuspense = () => {
             onDelete={(item) => { deleteGroup.mutate({ id: item.id })}}
             getColumns={(item) => [item.name]}
             editMutation={updateGroup}
-            editOnChange={setEditGroupName}
             deleteMutation={deleteGroup}
+            dialogEditInputs={[{
+              label: 'Nome',
+              type: 'text',
+              placeholder: 'Escreva aqui o nome do Grupo',
+              onChange: setEditGroupName,
+            }]}
           />
         </div>
       </div>
