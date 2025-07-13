@@ -1,7 +1,4 @@
-import { Group } from "../groups/types";
+import { InferSelectModel } from "drizzle-orm";
+import { products } from "@/db/schema";
 
-export interface Product {
-  id: string,
-  name: string,
-  group: Group,
-}
+export type Product = InferSelectModel<typeof products>;

@@ -21,6 +21,7 @@ import { GenericTable } from "@/components/generic-table";
 import { GroupSelect } from "../group-select";
 import { EditProductDialog } from "../dialogs/edit-product-dialog";
 import { DeleteProductDialog } from "../dialogs/delete-product-dialog";
+import { Item } from "@radix-ui/react-navigation-menu";
 
 export const ProductsSection = () => {
   return (
@@ -114,23 +115,14 @@ const ProductsSectionSuspense = () => {
       <div className="flex justify-center">
         <div>
           <GenericTable
-            data={data.pages.flatMap((page) => page.items.map((item) => { 
-              return {
-                id: item.products.id, 
-                name: item.products.name, 
-                group: {
-                  id: item.groups.id,
-                  name: item.groups.name,
-                } 
-              }
-            }))}
-            getId = {(item) => item.id}
+            data={data.pages.flatMap((page) => page.items)}
+            getId = {(item) => item.products.id}
             headers = {["Nome", "Grupo"]}
             getColumns = {(item) => [
-              item.name,
-              item.group.name
+              item.products.name,
+              item.groups.name
             ]}
-            renderRowActions={(product) => (
+            renderRowActions={(item) => (
               <div className="flex gap-3"> 
                 <EditProductDialog
                   groups={groupsData}
@@ -140,15 +132,15 @@ const ProductsSectionSuspense = () => {
                     }
                     updateProduct.mutate({ id: item.id, name: editProductName, groupId: editProductGroupId });
                   }}
-                  product={product}
+                  product={item.products}
                   onChangeName={setEditProductName}
                   editMutation={updateProduct}
                   onChangeGroupId={setEditProductGroupId}
                 />
                 <DeleteProductDialog
-                  product={product}
+                  product={item.products}
                   onDelete={(item) => {
-                    deleteProduct.mutate({id: product.id})
+                    deleteProduct.mutate({id: item.id})
                   }}
                   deleteMutation={deleteProduct}
                 />
