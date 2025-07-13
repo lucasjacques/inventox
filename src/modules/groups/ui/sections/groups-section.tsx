@@ -132,19 +132,8 @@ const GroupsSectionSuspense = () => {
           <GenericTable
             data={data.pages.flatMap((page) => page.items)}
             getId={(item) => item.id}
-            // onEdit={}
-            // getName={(item) => item.name}
             headers={["Nome"]}
-            // onDelete={(item) => { deleteGroup.mutate({ id: item.id })}}
             getColumns={(item) => [item.name]}
-            // editMutation={updateGroup}
-            // deleteMutation={deleteGroup}
-            // dialogEditInputs={[{
-            //   label: 'Nome',
-            //   type: 'text',
-            //   placeholder: 'Escreva aqui o nome do Grupo',
-            //   onChange: setEditGroupName,
-            // }]}
             renderRowActions={(group) => (
               <div className="flex gap-3"> 
                 <EditGroupDialog 

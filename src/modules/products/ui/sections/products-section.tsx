@@ -17,16 +17,10 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table"
 import { GenericTable } from "@/components/generic-table";
+import { GroupSelect } from "../group-select";
+import { EditProductDialog } from "../dialogs/edit-product-dialog";
+import { DeleteProductDialog } from "../dialogs/delete-product-dialog";
 
 export const ProductsSection = () => {
   return (
@@ -86,24 +80,16 @@ const ProductsSectionSuspense = () => {
     }
   })
 
+  const groupsData = data.pages[0].groupsData;
+
   return (
     <div>
       <div className="flex justify-center">
         <div className="flex">
-          <Select onValueChange={(value) => setNewProductGroupId(value)}>
-            <SelectTrigger className="m-2 w-[200px]" >
-              <SelectValue placeholder="Selecione um grupo" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {data.pages[0].groupsData.map((group, index) => {
-                  return (
-                    <SelectItem key={index} value={group.id}>{group.name}</SelectItem>
-                  )
-                })}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <GroupSelect
+            groups={groupsData}
+            onChange={setNewProductGroupId}
+          />
           <Input 
             className="m-2 w-[300px]"
             type="text"
@@ -121,9 +107,9 @@ const ProductsSectionSuspense = () => {
             }}
           >
           {createProduct.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
-          Inserir novo Produto
+            Inserir novo Produto
           </Button>
-          </div>
+        </div>
       </div>
       <div className="flex justify-center">
         <div>
@@ -132,63 +118,43 @@ const ProductsSectionSuspense = () => {
               return {
                 id: item.products.id, 
                 name: item.products.name, 
-                groupName: item.groups.name,
+                group: {
+                  id: item.groups.id,
+                  name: item.groups.name,
+                } 
               }
             }))}
             getId = {(item) => item.id}
-            // onEdit = {(item) => {
-            //   if (!editProductName) {
-            //     return;
-            //   }
-            //   updateProduct.mutate({ id: item.id, name: editProductName, groupId: editProductGroupId });
-            // }}
-            // getName = {(item) => item.name}
             headers = {["Nome", "Grupo"]}
-            // onDelete = {(item) => {
-            //   deleteProduct.mutate({ id: item.id })
-            // }}
             getColumns = {(item) => [
               item.name,
-              item.groupName
+              item.group.name
             ]}
-            // editMutation = {updateProduct}
-            // deleteMutation={deleteProduct}
-            // dialogEditInputs={[
-            //   { 
-            //     label: "Nome",
-            //     type: "text",
-            //     placeholder: "Escreva aqui o nome do Produto",
-            //     onChange: setEditProductName,
-            //   },
-            //   { 
-            //     label: "Grupo",
-            //     type: "text",
-            //     placeholder: "Selecione o nome do Grupo",
-            //     onChange: setEditProductGroupId,
-            //   },
-            // ]}
+            renderRowActions={(product) => (
+              <div className="flex gap-3"> 
+                <EditProductDialog
+                  groups={groupsData}
+                  onEdit = {(item) => {
+                    if (!editProductName) {
+                      return;
+                    }
+                    updateProduct.mutate({ id: item.id, name: editProductName, groupId: editProductGroupId });
+                  }}
+                  product={product}
+                  onChangeName={setEditProductName}
+                  editMutation={updateProduct}
+                  onChangeGroupId={setEditProductGroupId}
+                />
+                <DeleteProductDialog
+                  product={product}
+                  onDelete={(item) => {
+                    deleteProduct.mutate({id: product.id})
+                  }}
+                  deleteMutation={deleteProduct}
+                />
+              </div>
+            )}
           />
-          {/* <Table>
-            <TableCaption>
-              Lista de produtos atualizada
-            </TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Grupo</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.pages.flatMap(page => page.items).map((item, index) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell>{item.products.name}</TableCell>
-                    <TableCell>{item.groups.name}</TableCell>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table> */}
         </div>
       </div>
     </div>

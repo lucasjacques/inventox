@@ -1,6 +1,6 @@
 import { Loader2Icon, PencilIcon } from "lucide-react"
 
-import { Group } from "@/modules/types"
+import { Group } from "@/modules/groups/types"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
