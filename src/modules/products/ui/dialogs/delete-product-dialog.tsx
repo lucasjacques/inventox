@@ -1,19 +1,19 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Group } from "@/modules/groups/types"
 import { Loader2Icon, XIcon } from "lucide-react"
+import { Product } from "../../types"
 
-interface DeleteGroupDialogProps {
-  group: Group;
-  onDelete: (g: Group) => void;
+interface DeleteProductDialogProps {
+  product: Product;
+  onDelete: (p: Product) => void;
   deleteMutation: { isPending: boolean };
 }
 
-export const DeleteGroupDialog = ({
-  group,
+export const DeleteProductDialog = ({
+  product,
   onDelete,
   deleteMutation,
-}: DeleteGroupDialogProps) => {
+}: DeleteProductDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -24,7 +24,7 @@ export const DeleteGroupDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            Exclusão de item: {group.name}
+            Exclusão de item: {product.name}
           </DialogTitle>
         </DialogHeader>
         <DialogDescription>
@@ -35,7 +35,7 @@ export const DeleteGroupDialog = ({
             <Button variant="outline">Cancelar</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button variant="destructive" onClick={() => onDelete(group)}>
+            <Button variant="destructive" onClick={() => onDelete(product)}>
               {deleteMutation.isPending ? <Loader2Icon className="animate-spin"/> : <XIcon />}
               Excluir
             </Button>
