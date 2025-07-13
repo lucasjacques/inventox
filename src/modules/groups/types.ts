@@ -1,4 +1,4 @@
-export interface Group {
-  id: string;
-  name: string;
-}
+import { groups } from "@/db/schema";
+import { InferSelectModel } from "drizzle-orm";
+
+export type Group = InferSelectModel<typeof groups>;
