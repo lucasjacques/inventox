@@ -22,6 +22,9 @@ import { GroupSelect } from "../group-select";
 import { EditProductDialog } from "../dialogs/edit-product-dialog";
 import { DeleteProductDialog } from "../dialogs/delete-product-dialog";
 import { Item } from "@radix-ui/react-navigation-menu";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import { Label } from "@/components/ui/label";
 
 export const ProductsSection = () => {
   return (
@@ -86,34 +89,57 @@ const ProductsSectionSuspense = () => {
   return (
     <div>
       <div className="flex justify-center">
-        <div className="flex">
-          <GroupSelect
-            groups={groupsData}
-            onChange={setNewProductGroupId}
-          />
-          <Input 
-            className="m-2 w-[300px]"
-            type="text"
-            placeholder="Nome do produto"
-            onChange={(e) => setNewProductName(e.target.value)} 
-          />
-          <Button
-            className="m-2"
-            disabled={createProduct.isPending}
-            onClick={() => {
-              if ( !newProductGroupId || newProductName === "") {
-                return;
-              }
-              createProduct.mutate({groupId: newProductGroupId, name: newProductName})
-            }}
-          >
-          {createProduct.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
-            Inserir novo Produto
-          </Button>
-        </div>
+        <Dialog>
+          <form>
+            <DialogTrigger asChild>
+              <Button variant="blue">
+                Inserir novo Produto
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[350px]">
+              <DialogHeader>
+                <DialogTitle>Inserção de Item</DialogTitle>
+              </DialogHeader>
+              <div className="flex flex-col gap-3">
+                <Label>Nome:</Label>
+                <Input 
+                  className="m-2 w-[300px]"
+                  type="text"
+                  placeholder="Nome do produto"
+                  onChange={(e) => setNewProductName(e.target.value)} 
+                />
+                <Label>Grupo:</Label>
+                <GroupSelect
+                  groups={groupsData}
+                  onChange={setNewProductGroupId}
+                />
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancelar</Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button
+                    variant="blue"
+                    disabled={createProduct.isPending}
+                    onClick={() => {
+                      if ( !newProductGroupId || newProductName === "") {
+                        return;
+                      }
+                      createProduct.mutate({groupId: newProductGroupId, name: newProductName})
+                    }}
+                  >
+                  {createProduct.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
+                    Inserir novo Produto
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </form>
+        </Dialog>
       </div>
       <div className="flex justify-center">
-        <div>
+        <div className="flex m-4">
           <GenericTable
             data={data.pages.flatMap((page) => page.items)}
             getId = {(item) => item.products.id}
