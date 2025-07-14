@@ -128,7 +128,7 @@ const GroupsSectionSuspense = () => {
         </Dialog>
       </div>
       <div className="flex justify-center">
-        <div className="m-4 flex">
+        <div className="flex m-4">
           <GenericTable
             data={data.pages.flatMap((page) => page.items)}
             getId={(item) => item.id}
