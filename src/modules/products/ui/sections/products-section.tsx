@@ -25,7 +25,7 @@ import { Item } from "@radix-ui/react-navigation-menu";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Label } from "@/components/ui/label";
-import { InsertProductDialog } from "../dialogs/insert-product-dialog";
+import { CreateProductDialog } from "../dialogs/insert-product-dialog";
 
 export const ProductsSection = () => {
   return (
@@ -44,8 +44,8 @@ const ProductsSectionSuspense = () => {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  const [ newProductName, setNewProductName ] = useState("");
-  const [ newProductGroupId, setNewProductGroupId ] = useState("");
+  const [ createProductName, setCreateProductName ] = useState("");
+  const [ createProductGroupId, setCreateProductGroupId ] = useState("");
 
   const [ editProductName, setEditProductName ] = useState("");
   const [ editProductGroupId, setEditProductGroupId ] = useState("");
@@ -53,8 +53,8 @@ const ProductsSectionSuspense = () => {
   const utils = trpc.useUtils();
   const createProduct = trpc.products.create.useMutation({
     onSuccess: () => {
-      setNewProductGroupId("");
-      setNewProductName("");
+      setCreateProductGroupId("");
+      setCreateProductName("");
       toast.success("Produto criado com sucesso!")
       utils.products.getMany.invalidate();
     },
@@ -90,17 +90,17 @@ const ProductsSectionSuspense = () => {
   return (
     <div>
       <div className="flex justify-center">
-        <InsertProductDialog
+        <CreateProductDialog
           groups={groupsData}
-          onInsert={() => {
-            if ( !newProductGroupId || newProductName === "") {
+          onCreate={() => {
+            if ( !createProductGroupId || createProductName === "") {
               return;
             }
-            createProduct.mutate({groupId: newProductGroupId, name: newProductName})
+            createProduct.mutate({groupId: createProductGroupId, name: createProductName})
           }}
-          insertMutation={createProduct}
-          onChangeProductName={setNewProductName}
-          onChangeProductGroupId={setNewProductGroupId}
+          createMutation={createProduct}
+          onChangeProductName={setCreateProductName}
+          onChangeProductGroupId={setCreateProductGroupId}
         />
       </div>
       <div className="flex justify-center">

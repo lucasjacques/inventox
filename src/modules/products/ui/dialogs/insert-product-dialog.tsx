@@ -6,21 +6,21 @@ import { GroupSelect } from "../group-select";
 import { Group } from "@/modules/groups/types";
 import { Loader2Icon, PlusIcon } from "lucide-react";
 
-interface InsertProductDialogProps {
+interface CreateProductDialogProps {
   groups: Group[];
-  onInsert: () => void
-  insertMutation: { isPending: boolean };
+  onCreate: () => void
+  createMutation: { isPending: boolean };
   onChangeProductName: (s: string) => void;
   onChangeProductGroupId: (id: string) => void;
 }
 
-export const InsertProductDialog = ({
+export const CreateProductDialog = ({
   groups,
+  onCreate,
+  createMutation,
   onChangeProductName,
   onChangeProductGroupId,
-  insertMutation,
-  onInsert,
-}: InsertProductDialogProps) => {
+}: CreateProductDialogProps) => {
 return (
   <Dialog>
     <form>
@@ -54,16 +54,10 @@ return (
           <DialogClose asChild>
             <Button
               variant="blue"
-              disabled={insertMutation.isPending}
-              onClick={() => onInsert()}
-              //   () => {
-              //   if ( !newProductGroupId || newProductName === "") {
-              //     return;
-              //   }
-              //   createProduct.mutate({groupId: newProductGroupId, name: newProductName})
-              // }
+              disabled={createMutation.isPending}
+              onClick={() => onCreate()}
             >
-            {insertMutation.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
+            {createMutation.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
               Inserir novo Produto
             </Button>
           </DialogClose>
