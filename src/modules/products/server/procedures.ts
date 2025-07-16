@@ -71,7 +71,7 @@ export const productsRouter = createTRPCRouter({
       .from(products)
       .where(and(
         cursor
-        ? or (
+        ? or(
           lt(products.name, cursor.name),
           and(
             eq(products.name, cursor.name),
