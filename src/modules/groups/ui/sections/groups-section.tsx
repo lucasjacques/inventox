@@ -31,6 +31,7 @@ import {
 import { GenericTable } from "@/components/generic-table";
 import { EditGroupDialog } from "../dialogs/edit-group-dialog";
 import { DeleteGroupDialog } from "../dialogs/delete-group-dialog";
+import { CreateGroupDialog } from "../dialogs/create-group-dialog";
 
 export const GroupsSection = () => {
   return (
@@ -49,13 +50,13 @@ const GroupsSectionSuspense = () => {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  const [ newGroupName, setNewGroupName ] = useState("");
+  const [ createGroupName, setCreateGroupName ] = useState("");
   const [ editGroupName, setEditGroupName ] = useState("");
 
   const utils = trpc.useUtils();
   const createGroup = trpc.groups.create.useMutation({
     onSuccess: () => {
-      setNewGroupName("");
+      setCreateGroupName("");
       toast.success("Grupo criado com sucesso!");
       utils.groups.getMany.invalidate();
     },
@@ -86,7 +87,7 @@ const GroupsSectionSuspense = () => {
   return (
     <div>
       <div className="flex justify-center">
-        <Dialog>
+        {/* <Dialog>
           <DialogTrigger asChild>
             <Button variant="blue">Adicionar Novo Grupo</Button>
           </DialogTrigger>
@@ -125,7 +126,18 @@ const GroupsSectionSuspense = () => {
               </DialogFooter>
             </form>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
+        <CreateGroupDialog 
+          onCreate={() => {
+            if (createGroupName === "") {
+              return;
+            }
+            createGroup.mutate({groupName: createGroupName});
+          }}
+          createMutation={createGroup}
+          onChangeGroupName={setCreateGroupName}
+
+        />
       </div>
       <div className="flex justify-center">
         <div className="flex m-4">
