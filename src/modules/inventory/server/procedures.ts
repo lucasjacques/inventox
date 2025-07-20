@@ -1,8 +1,11 @@
+import { z } from "zod";
+import { and, desc, eq, lt, or } from "drizzle-orm";
+
 import { db } from "@/db";
 import { products, stockIns, stockOuts } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
-import { and, desc, eq, lt, or } from "drizzle-orm";
-import { z } from "zod";
+
+import { Inventory } from "../types";
 
 export const inventoryRouter = createTRPCRouter({
   getMany: protectedProcedure
@@ -14,7 +17,7 @@ export const inventoryRouter = createTRPCRouter({
       stockOutsUpdatedAt: z.date(),
     })
     .nullish(),
-    limit: z.number().min(1).min(100),
+    limit: z.number().min(1).max(100),
   }))
   .query(async ({ ctx, input }) => {
     const { cursor, limit } = input;
@@ -47,17 +50,17 @@ export const inventoryRouter = createTRPCRouter({
       .where(and(
         cursor
         ? or(
-            lt(stockIns.updatedAt, cursor.stockOutsUpdatedAt),
+            lt(stockOuts.updatedAt, cursor.stockOutsUpdatedAt),
             and(
-              eq(stockIns.updatedAt, cursor.stockOutsUpdatedAt),
-              lt(stockIns.id, cursor.stockOutsId)
+              eq(stockOuts.updatedAt, cursor.stockOutsUpdatedAt),
+              lt(stockOuts.id, cursor.stockOutsId)
             )
           )
         : undefined
       ))
-      .orderBy(desc(stockIns.updatedAt), desc(stockIns.id))
+      .orderBy(desc(stockOuts.updatedAt), desc(stockOuts.id))
       .limit(limit + 1)
-      .innerJoin(products, eq(stockIns.productId, products.id));
+      .innerJoin(products, eq(stockOuts.productId, products.id));
   
     const hasMoreStockOuts = dataStockOuts.length > limit;
     const itemsStockOuts = hasMoreStockOuts ? dataStockOuts.slice(0, -1) : dataStockOuts;
@@ -68,15 +71,41 @@ export const inventoryRouter = createTRPCRouter({
     const nextCursor = hasMore
       ? {
         stockInsId: lastItemStockIns.stock_ins.id,
-        stockInsupdatedAt: lastItemStockIns.stock_ins.updatedAt,
+        stockInsUpdatedAt: lastItemStockIns.stock_ins.updatedAt,
         stockOutsId: lastItemStockOuts.stock_outs.id,
-        stockOutsupdatedAt: lastItemStockOuts.stock_outs.updatedAt,
+        stockOutsUpdatedAt: lastItemStockOuts.stock_outs.updatedAt,
       }
       : null;
 
+    const inventoryMap = new Map<string, Inventory>
+    for (const { products, stock_ins } of itemsStockIns) {
+      const existing = inventoryMap.get(products.id);
+      if (existing) {
+        existing.quantity += stock_ins.value;
+      } else {
+        inventoryMap.set(products.id, {
+          products,
+          quantity: stock_ins.value,
+        })
+      }
+    }
+
+    for (const { products, stock_outs } of itemsStockOuts) {
+      const existing = inventoryMap.get(products.id);
+      if (existing) {
+        existing.quantity -= stock_outs.value;
+      } else {
+        inventoryMap.set(products.id, {
+          products,
+          quantity: -stock_outs.value,
+        })
+      }
+    }
+
+    const items: Inventory[] = Array.from(inventoryMap.values())
+
     return {
-      itemsStockIns,
-      itemsStockOuts,
+      items,
       nextCursor,
     }
   })
