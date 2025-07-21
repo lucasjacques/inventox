@@ -2,7 +2,7 @@ import { z } from "zod";
 import { and, desc, eq, lt, or } from "drizzle-orm";
 
 import { db } from "@/db";
-import { products, stockIns, stockOuts } from "@/db/schema";
+import { groups, products, stockIns, stockOuts } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
 import { Inventory } from "../types";
@@ -38,7 +38,8 @@ export const inventoryRouter = createTRPCRouter({
       ))
       .orderBy(desc(stockIns.updatedAt), desc(stockIns.id))
       .limit(limit + 1)
-      .innerJoin(products, eq(stockIns.productId, products.id));
+      .innerJoin(products, eq(stockIns.productId, products.id))
+      .innerJoin(groups, eq(products.groupId, groups.id));
   
     const hasMoreStockIns = dataStockIns.length > limit;
     const itemsStockIns = hasMoreStockIns ? dataStockIns.slice(0, -1) : dataStockIns;
@@ -60,7 +61,8 @@ export const inventoryRouter = createTRPCRouter({
       ))
       .orderBy(desc(stockOuts.updatedAt), desc(stockOuts.id))
       .limit(limit + 1)
-      .innerJoin(products, eq(stockOuts.productId, products.id));
+      .innerJoin(products, eq(stockOuts.productId, products.id))
+      .innerJoin(groups, eq(products.groupId, groups.id));
   
     const hasMoreStockOuts = dataStockOuts.length > limit;
     const itemsStockOuts = hasMoreStockOuts ? dataStockOuts.slice(0, -1) : dataStockOuts;
@@ -78,24 +80,26 @@ export const inventoryRouter = createTRPCRouter({
       : null;
 
     const inventoryMap = new Map<string, Inventory>
-    for (const { products, stock_ins } of itemsStockIns) {
+    for (const { products, groups, stock_ins } of itemsStockIns) {
       const existing = inventoryMap.get(products.id);
       if (existing) {
         existing.quantity += stock_ins.value;
       } else {
         inventoryMap.set(products.id, {
+          groups,
           products,
           quantity: stock_ins.value,
         })
       }
     }
 
-    for (const { products, stock_outs } of itemsStockOuts) {
+    for (const { products, groups, stock_outs } of itemsStockOuts) {
       const existing = inventoryMap.get(products.id);
       if (existing) {
         existing.quantity -= stock_outs.value;
       } else {
         inventoryMap.set(products.id, {
+          groups,
           products,
           quantity: -stock_outs.value,
         })
