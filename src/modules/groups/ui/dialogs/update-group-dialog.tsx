@@ -14,19 +14,19 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog"
 
-interface EditGroupDialogProps {
+interface UpdateGroupDialogProps {
   group: Group;
   onEdit: (g: Group) => void;
   onChange: (s: string) => void;
-  editMutation: { isPending: boolean };
+  updateMutation: { isPending: boolean };
 }
 
-export const EditGroupDialog = ({
+export const UpdateGroupDialog = ({
   group,
   onEdit,
   onChange,
-  editMutation,
-}: EditGroupDialogProps) => {
+  updateMutation: editMutation,
+}: UpdateGroupDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>

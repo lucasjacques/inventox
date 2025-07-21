@@ -3,14 +3,14 @@
 import { toast } from "sonner";
 import { Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { Loader2Icon, PencilIcon, PlusIcon, XIcon } from "lucide-react";
 
 import { trpc } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
 import { GenericTable } from "@/components/generic-table";
-import { EditGroupDialog } from "../dialogs/edit-group-dialog";
-import { DeleteGroupDialog } from "../dialogs/delete-group-dialog";
+
 import { CreateGroupDialog } from "../dialogs/create-group-dialog";
+import { DeleteGroupDialog } from "../dialogs/delete-group-dialog";
+import { UpdateGroupDialog } from "../dialogs/update-group-dialog";
 
 export const GroupsSection = () => {
   return (
@@ -23,14 +23,14 @@ export const GroupsSection = () => {
 }
 
 const GroupsSectionSuspense = () => {
-  const [ data, query ] = trpc.groups.getMany.useSuspenseInfiniteQuery({
+  const [ data ] = trpc.groups.getMany.useSuspenseInfiniteQuery({
     limit: DEFAULT_LIMIT,
   }, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
   const [ createGroupName, setCreateGroupName ] = useState("");
-  const [ editGroupName, setEditGroupName ] = useState("");
+  const [ updateGroupName, setUpdateGroupName ] = useState("");
 
   const utils = trpc.useUtils();
   const createGroup = trpc.groups.create.useMutation({
@@ -54,7 +54,7 @@ const GroupsSectionSuspense = () => {
   })
   const updateGroup = trpc.groups.update.useMutation({
     onSuccess: () => {
-      setEditGroupName("");
+      setUpdateGroupName("");
       toast.success("Grupo editado com sucesso!");
       utils.groups.getMany.invalidate();
     },
@@ -87,16 +87,16 @@ const GroupsSectionSuspense = () => {
             getColumns={(item) => [item.name]}
             renderRowActions={(group) => (
               <div className="flex gap-3"> 
-                <EditGroupDialog 
+                <UpdateGroupDialog 
                   group={group}
                   onEdit={(item) => {
-                    if (!editGroupName) {
+                    if (!updateGroupName) {
                       return;
                     }
-                    updateGroup.mutate({ id: item.id, name: editGroupName });
+                    updateGroup.mutate({ id: item.id, name: updateGroupName });
                   }}
-                  onChange={setEditGroupName}
-                  editMutation={updateGroup}
+                  onChange={setUpdateGroupName}
+                  updateMutation={updateGroup}
                 />
                 <DeleteGroupDialog
                   group={group}
