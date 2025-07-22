@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { GenericTable } from "@/components/generic-table";
 import { GroupSelect } from "../group-select";
-import { EditProductDialog } from "../dialogs/edit-product-dialog";
+import { EditProductDialog } from "../dialogs/update-product-dialog";
 import { DeleteProductDialog } from "../dialogs/delete-product-dialog";
 import { Item } from "@radix-ui/react-navigation-menu";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -47,8 +47,8 @@ const ProductsSectionSuspense = () => {
   const [ createProductName, setCreateProductName ] = useState("");
   const [ createProductGroupId, setCreateProductGroupId ] = useState("");
 
-  const [ editProductName, setEditProductName ] = useState("");
-  const [ editProductGroupId, setEditProductGroupId ] = useState("");
+  const [ updateProductName, setUpdateProductName ] = useState("");
+  const [ updateProductGroupId, setUpdateProductGroupId ] = useState("");
 
   const utils = trpc.useUtils();
   const createProduct = trpc.products.create.useMutation({
@@ -75,8 +75,8 @@ const ProductsSectionSuspense = () => {
 
   const updateProduct = trpc.products.update.useMutation({
     onSuccess: () => {
-      setEditProductName("");
-      setEditProductGroupId("");
+      setUpdateProductName("");
+      setUpdateProductGroupId("");
       toast.success("Produto editado com sucesso!")
       utils.products.getMany.invalidate();
     },
@@ -117,16 +117,16 @@ const ProductsSectionSuspense = () => {
               <div className="flex gap-3"> 
                 <EditProductDialog
                   groups={groupsData}
-                  onEdit = {(item) => {
-                    if (!editProductName) {
+                  onUpdate = {(item) => {
+                    if (!updateProductName) {
                       return;
                     }
-                    updateProduct.mutate({ id: item.id, name: editProductName, groupId: editProductGroupId });
+                    updateProduct.mutate({ id: item.id, name: updateProductName, groupId: updateProductGroupId });
                   }}
                   product={item.products}
-                  onChangeName={setEditProductName}
-                  editMutation={updateProduct}
-                  onChangeGroupId={setEditProductGroupId}
+                  onChangeName={setUpdateProductName}
+                  updateMutation={updateProduct}
+                  onChangeGroupId={setUpdateProductGroupId}
                 />
                 <DeleteProductDialog
                   product={item.products}
