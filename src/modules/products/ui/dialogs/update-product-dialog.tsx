@@ -18,23 +18,23 @@ import { Select } from "@/components/ui/select";
 import { GroupSelect } from "../group-select";
 import { Group } from "@/modules/groups/types";
 
-interface EditProductDialogProps {
+interface UpdateProductDialogProps {
   groups: Group[];
-  onEdit: (p: Product) => void;
+  onUpdate: (p: Product) => void;
   product: Product;
   onChangeName: (s: string) => void;
-  editMutation: { isPending: boolean };
+  updateMutation: { isPending: boolean };
   onChangeGroupId: (s: string) => void;
 }
 
 export const EditProductDialog = ({
   groups,
-  onEdit,
+  onUpdate,
   product,
   onChangeName,
-  editMutation,
+  updateMutation,
   onChangeGroupId,
-}: EditProductDialogProps) => {
+}: UpdateProductDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -64,9 +64,9 @@ export const EditProductDialog = ({
             <Button variant="outline">Cancelar</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button variant="blue" onClick={() => onEdit(product)}
+            <Button variant="blue" onClick={() => onUpdate(product)}
             >
-              {editMutation.isPending ? <Loader2Icon className="animate-spin"/> : <PencilIcon />}
+              {updateMutation.isPending ? <Loader2Icon className="animate-spin"/> : <PencilIcon />}
               Editar
             </Button>
           </DialogClose>
