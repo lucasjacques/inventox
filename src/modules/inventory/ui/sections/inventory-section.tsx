@@ -100,7 +100,7 @@ const InventorySectionSuspense = () => {
             <tbody>
               {data.map((row) => {
                 return (
-                  <tr>
+                  <tr key={row.products.id}>
                     <td className="border border-gray-300 px-4 py-2">{row.products.name}</td>
                     <td className="border border-gray-300 px-4 py-2">{row.quantity}</td>
                     <td className="border border-gray-300 px-4 py-2">{row.groups.name}</td>

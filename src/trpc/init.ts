@@ -42,7 +42,7 @@ export const protectedProcedure = t.procedure.use( async function isAuthed(opts)
   .from(users)
   .where(eq(users.clerkId, ctx.clerkUserId || ""))
   
-  if (!user) {
+  if (!user || user.role !== "admin" ) {
     console.log('user', ctx.clerkUserId)
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }

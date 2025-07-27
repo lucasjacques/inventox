@@ -3,9 +3,10 @@ import { pgTable, uuid, text, timestamp, uniqueIndex, integer } from "drizzle-or
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
-  clerkId: text("clerkId").notNull(),
   name: text("name").notNull(),
+  role: text("role").default("user").notNull(),
   email: text("email").notNull(),
+  clerkId: text("clerkId").notNull(),
   imageUrl: text("image_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
