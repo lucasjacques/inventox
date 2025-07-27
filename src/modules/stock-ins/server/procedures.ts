@@ -15,7 +15,7 @@ export const stockInsRouter = createTRPCRouter({
     .nullish(),
     limit: z.number().min(1).max(100),
   }))
-  .query(async ({ ctx, input }) => {
+  .query(async ({ input }) => {
     const { cursor, limit } = input;
 
     const data = await db

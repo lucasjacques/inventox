@@ -39,7 +39,6 @@ export function GenericTable<T extends object> ({
       </TableHeader>
       <TableBody>
         {data.map((row) => {
-          const columns = Object.keys(row) as Array<keyof T>;
           return (
             <TableRow key={getId(row)}>
               {getColumns(row).map((cell, index2) => {

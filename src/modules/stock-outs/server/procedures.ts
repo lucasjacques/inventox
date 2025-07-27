@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { groups, products, stockOuts, users } from "@/db/schema";
+import { products, stockOuts, users } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { and, desc, eq, lt, or } from "drizzle-orm";
 import { z } from "zod";

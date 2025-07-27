@@ -3,28 +3,12 @@
 import { toast } from "sonner";
 import { ErrorBoundary } from "react-error-boundary"
 import { Suspense, useState } from "react"
-import { Loader2Icon, PlusIcon } from "lucide-react";
 
 import { trpc } from "@/trpc/client"
 import { DEFAULT_LIMIT } from "@/constants"
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { 
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
 import { GenericTable } from "@/components/generic-table";
-import { GroupSelect } from "../group-select";
 import { EditProductDialog } from "../dialogs/update-product-dialog";
 import { DeleteProductDialog } from "../dialogs/delete-product-dialog";
-import { Item } from "@radix-ui/react-navigation-menu";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
-import { Label } from "@/components/ui/label";
 import { CreateProductDialog } from "../dialogs/insert-product-dialog";
 
 export const ProductsSection = () => {
