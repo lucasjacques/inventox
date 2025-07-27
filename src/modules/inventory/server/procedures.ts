@@ -19,7 +19,7 @@ export const inventoryRouter = createTRPCRouter({
     .nullish(),
     limit: z.number().min(1).max(100),
   }))
-  .query(async ({ ctx, input }) => {
+  .query(async ({ input }) => {
     const { cursor, limit } = input;
 
     const dataStockIns = await db

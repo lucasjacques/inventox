@@ -44,6 +44,7 @@ const items = [
 export const CommonNavbar = () => {
   const clerk = useClerk();
   const { isSignedIn } = useAuth(); 
+  const pathname = usePathname();
 
   return (
     <nav className="fixed top-0 left-0 right-0 h-16 bg-blue-500 flex items-center px-2 pr-5 z-50">
@@ -61,7 +62,7 @@ export const CommonNavbar = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 {items.map((item, index)=>{
-                  const isSelected = item.url === usePathname();
+                  const isSelected = item.url === pathname;
                   return (
                     <NavigationMenuItem key={index}>
                       <Button 
