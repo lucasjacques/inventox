@@ -9,7 +9,7 @@
   <h3 align="center">Inventox</h3>
 
   <p align="center">
-    This project is an inventory management system.
+    An awesome inventory management system built as a learning project.
     <br />
     <br />
     <a href="https://github.com/lucasjacques/inventox/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
@@ -18,20 +18,48 @@
   </p>
 </div>
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
+
+## About The Project
+
+This inventory project is me fighting chaos with code — one useState at a time. It’s a learning project where I practice real-world concepts like role-based access, database relations, and the dark art of centering divs.
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
+bun dev # (recommended)
+# or
 npm run dev
 # or
 yarn dev
 # or
 pnpm dev
 # or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
