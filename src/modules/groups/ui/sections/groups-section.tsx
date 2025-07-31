@@ -8,9 +8,9 @@ import { trpc } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
 import { GenericTable } from "@/components/generic-table";
 
-import { CreateGroupDialog } from "../dialogs/create-group-dialog";
-import { DeleteGroupDialog } from "../dialogs/delete-group-dialog";
-import { UpdateGroupDialog } from "../dialogs/update-group-dialog";
+import { CreateGroupDialog } from "../components/dialogs/create-group-dialog";
+import { DeleteGroupDialog } from "../components/dialogs/delete-group-dialog";
+import { UpdateGroupDialog } from "../components/dialogs/update-group-dialog";
 
 export const GroupsSection = () => {
   return (
