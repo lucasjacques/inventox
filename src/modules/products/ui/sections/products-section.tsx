@@ -7,9 +7,9 @@ import { Suspense, useState } from "react"
 import { trpc } from "@/trpc/client"
 import { DEFAULT_LIMIT } from "@/constants"
 import { GenericTable } from "@/components/generic-table";
-import { EditProductDialog } from "../dialogs/update-product-dialog";
-import { DeleteProductDialog } from "../dialogs/delete-product-dialog";
-import { CreateProductDialog } from "../dialogs/insert-product-dialog";
+import { EditProductDialog } from "../components/dialogs/update-product-dialog";
+import { DeleteProductDialog } from "../components/dialogs/delete-product-dialog";
+import { CreateProductDialog } from "../components/dialogs/insert-product-dialog";
 
 export const ProductsSection = () => {
   return (
