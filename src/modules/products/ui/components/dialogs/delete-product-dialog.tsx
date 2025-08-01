@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Loader2Icon, XIcon } from "lucide-react"
-import { Product } from "../../types"
+import { Product } from "../../../types"
 
 interface DeleteProductDialogProps {
   product: Product;
