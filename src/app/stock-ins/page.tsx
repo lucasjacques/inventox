@@ -2,7 +2,7 @@ import { ClerkLoaded } from '@clerk/nextjs';
 
 import { DEFAULT_LIMIT } from '@/constants';
 import { HydrateClient, trpc } from "@/trpc/server";
-import { StockInsView } from '@/modules/stock-ins/ui/view/stock-ins-view';
+import { StockInsView } from '@/modules/stock-ins/ui/views/stock-ins-view';
 
 export default async function StockIns() {
 
