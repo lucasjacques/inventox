@@ -92,7 +92,7 @@ const InventorySectionSuspense = () => {
             />
             </div>
       </div>
-      <div className="justify-center">
+      <div className="justify-center hidden">
         <div ref={tableRef}>
           <div className="flex justify-between items-center w-full p-4 min-w-0">
             <img className="w-[200px]" src="/amipesca-logo.png" alt="Amipesca Logo"/>
@@ -117,7 +117,6 @@ const InventorySectionSuspense = () => {
                     </tr>
                   )
                 })}
-                {/* Add more rows dynamically */}
               </tbody>
             </table>
           </div>
