@@ -49,14 +49,13 @@ This inventory project is me fighting chaos with code — one useState at a time
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
 * [![Next][Next.js]][Next-url]
 * [![React][React.js]][React-url]
 * [![Tailwind][Tailwindcss]][Tailwind-url]
 * [![PostgreSQL][PostgreSQL]][PostgreSQL-url]
 * [![Drizzle][Drizzle]][Drizzle-url]
 * [![Shadcn/ui][Shadcn/ui]][Shadcn/ui-url]
+* [![Bun][Bun]][Bun-url]
 * [![Clerk][Clerk]][Clerk-url]
 * [![Ngrok][Ngrok]][Ngrok-url]
 * [![Upstash][Upstash]][Upstash-url]
@@ -65,21 +64,13 @@ This section should list any major frameworks/libraries used to bootstrap your p
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- GETTING STARTED -->
 ## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+These are the tools you'll need to install:
+* [bun](https://bun.com/) (recommended, but you can use npm, yarn or pnpm)
+* [ngrok](https://ngrok.com/downloads/)
 
 ### Installation
 
@@ -213,26 +204,28 @@ Use this space to list resources you find helpful and would like to give credit 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Tailwindcss]: https://img.shields.io/badge/Tailwindcss-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white
-[Tailwind-url]: https://tailwindcss.com/
+[Bun]: https://img.shields.io/badge/Bun-F9F1E1?style=for-the-badge&logo=bun&logoColor=000000
+[Bun-url]: https://bun.com/
+[Clerk]: https://img.shields.io/badge/Clerk-F5F6F6?style=for-the-badge&logo=clerk&logoColor=6C47FF
+[Clerk-url]: https://clerk.com/
 [Drizzle]: https://img.shields.io/badge/Drizzle-20232A?style=for-the-badge&logo=drizzle&logoColor=#C5F74F
 [Drizzle-url]: https://orm.drizzle.team/
+[Next.js]: https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
 [Ngrok]: https://img.shields.io/badge/Ngrok-1F1E37?style=for-the-badge&logo=ngrok&logoColor=white
 [Ngrok-url]: https://ngrok.com/
-[Clerk]: https://img.shields.io/badge/Clerk-f5f6f6?style=for-the-badge&logo=clerk&logoColor=6C47FF
-[Clerk-url]: https://clerk.com/
-[Shadcn/ui]: https://img.shields.io/badge/Shadcn/ui-FFFFFF?style=for-the-badge&logo=shadcnui&logoColor=000000
-[Shadcn/ui-url]: https://ui.shadcn.com/
-[Upstash]: https://img.shields.io/badge/Upstash-EEF3F2?style=for-the-badge&logo=upstash&logoColor=00E9A3
-[Upstash-url]: https://upstash.com/
-[tRPC]: https://img.shields.io/badge/tRPC-111111?style=for-the-badge&logo=trpc&logoColor=2596BE
-[tRPC-url]: https://trpc.io/
 [PostgreSQL]: https://img.shields.io/badge/PostgreSQL-FFFFFF?style=for-the-badge&logo=postgresql&logoColor=4169E1
 [PostgreSQL-url]: https://www.postgresql.org/
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Shadcn/ui]: https://img.shields.io/badge/Shadcn/ui-FFFFFF?style=for-the-badge&logo=shadcnui&logoColor=000000
+[Shadcn/ui-url]: https://ui.shadcn.com/
+[Tailwindcss]: https://img.shields.io/badge/Tailwindcss-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white
+[Tailwind-url]: https://tailwindcss.com/
+[tRPC]: https://img.shields.io/badge/tRPC-111111?style=for-the-badge&logo=trpc&logoColor=2596BE
+[tRPC-url]: https://trpc.io/
+[Upstash]: https://img.shields.io/badge/Upstash-EEF3F2?style=for-the-badge&logo=upstash&logoColor=00E9A3
+[Upstash-url]: https://upstash.com/
 [Zod]: https://img.shields.io/badge/Zod-FAFAFA?style=for-the-badge&logo=zod&logoColor=3E67B1
 [Zod-url]: https://zod.dev/
 
