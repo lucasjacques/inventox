@@ -9,14 +9,6 @@ import { trpc } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { 
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -48,13 +40,13 @@ const StockInsSectionSuspense = () => {
   });
 
   const [productId, setProductId] = useState("");
-  const [stockInsValue, setStockInsValue] = useState<number | undefined>();
+  const [stockInsQuantity, setStockInsQuantity] = useState<number | undefined>();
 
   const utils = trpc.useUtils();
   const create = trpc.stockIns.create.useMutation({
     onSuccess: () => {
       setProductId("");
-      setStockInsValue(undefined);
+      setStockInsQuantity(undefined);
       toast.success("Entrada criada com sucesso!");
       utils.stockIns.getMany.invalidate();
     },
@@ -71,16 +63,16 @@ const StockInsSectionSuspense = () => {
             products={data.pages[0].productsData}
             onChange={setProductId} 
           />
-          <Input className="m-2" type="number" placeholder="Valor" onChange={(e) => setStockInsValue(Number(e.target.value))}>
+          <Input className="m-2" type="number" placeholder="Valor" onChange={(e) => setStockInsQuantity(Number(e.target.value))}>
           </Input>
           <Button 
             className="m-2" 
             disabled={create.isPending}
             onClick={() => {
-              if( !productId || stockInsValue === undefined ) {
+              if( !productId || stockInsQuantity === undefined ) {
                 return;
               }
-              create.mutate({productId: productId, value: stockInsValue})
+              create.mutate({productId: productId, quantity: stockInsQuantity})
             }}
             >
             {create.isPending ? <Loader2Icon className="animate-spin"/> : <PlusIcon />}
@@ -106,7 +98,7 @@ const StockInsSectionSuspense = () => {
                     <TableRow key={index}>
                       <TableCell className="font-medium">{row.stock_ins.createdAt.toLocaleString()}</TableCell>
                       <TableCell >{row.products.name}</TableCell>
-                      <TableCell className="text-center">{row.stock_ins.value}</TableCell>
+                      <TableCell className="text-center">{row.stock_ins.quantity}</TableCell>
                       <TableCell className="text-center">{row.users.name}</TableCell>
                     </TableRow>
                   )

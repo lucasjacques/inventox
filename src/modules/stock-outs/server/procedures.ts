@@ -59,7 +59,7 @@ export const stockOutsRouter = createTRPCRouter({
 
   create: protectedProcedure
   .input(z.object({
-    value: z.number().nonnegative(),
+    quantity: z.number().nonnegative(),
     productId: z.string().uuid(),
   }))
   .mutation(async ({ ctx, input }) => {
@@ -68,7 +68,7 @@ export const stockOutsRouter = createTRPCRouter({
     const [ stockOut ] = await db
       .insert(stockOuts)
       .values({
-        value: input.value,
+        quantity: input.quantity,
         userId,
         productId: input.productId,
       })

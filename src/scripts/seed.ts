@@ -89,12 +89,12 @@ async function main() {
     });
     const insertedProducts = await db.insert(products).values(productValues).returning();
 
-    const stockInValues = products1StockIns.map((value, index) => ({
-      value: value,
+    const stockInValues = products1StockIns.map((quantity, index) => ({
+      quantity: quantity,
       productId: insertedProducts[index].id,
       userId: getRandomInteger(1,2) ? insertedUsers[0].id : insertedUsers[1].id,
-    })).concat(products2StockIns.map((value, index) => ({
-      value: value,
+    })).concat(products2StockIns.map((quantity, index) => ({
+      quantity: quantity,
       productId: insertedProducts[index+3].id,
       userId: getRandomInteger(0,1) ? insertedUsers[0].id : insertedUsers[1].id,
     })));
