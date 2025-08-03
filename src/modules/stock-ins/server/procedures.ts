@@ -64,7 +64,7 @@ export const stockInsRouter = createTRPCRouter({
   create: protectedProcedure
     .input(z.object({
       productId: z.string(),
-      value: z.number().nonnegative(),
+      quantity: z.number().nonnegative(),
     }))
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.user;
@@ -74,7 +74,7 @@ export const stockInsRouter = createTRPCRouter({
         .values({
           userId,
           productId: input.productId,
-          value: input.value,
+          quantity: input.quantity,
         })
         .returning();
       

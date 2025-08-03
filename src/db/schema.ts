@@ -42,7 +42,7 @@ export const productRelations = relations(products, ({ one }) => ({
 
 export const stockIns = pgTable("stock_ins", {
   id: uuid("id").primaryKey().defaultRandom(),
-  value: integer("value").notNull(),
+  quantity: integer("quantity").notNull(),
   productId: uuid("product_id").notNull().references(() => products.id, {
     onDelete: "cascade"
   }),
@@ -66,7 +66,7 @@ export const stockInRelations = relations(stockIns, ({ one }) => ({
 
 export const stockOuts = pgTable("stock_outs", {
   id: uuid("id").primaryKey().defaultRandom(),
-  value: integer("value").notNull(),
+  quantity: integer("quantity").notNull(),
   productId: uuid("product_id").notNull().references(() => products.id, {
     onDelete: "cascade",
   }),
