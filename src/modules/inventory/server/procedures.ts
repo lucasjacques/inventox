@@ -83,12 +83,12 @@ export const inventoryRouter = createTRPCRouter({
     for (const { products, groups, stock_ins } of itemsStockIns) {
       const existing = inventoryMap.get(products.id);
       if (existing) {
-        existing.quantity += stock_ins.value;
+        existing.quantity += stock_ins.quantity;
       } else {
         inventoryMap.set(products.id, {
           groups,
           products,
-          quantity: stock_ins.value,
+          quantity: stock_ins.quantity,
         })
       }
     }
@@ -96,12 +96,12 @@ export const inventoryRouter = createTRPCRouter({
     for (const { products, groups, stock_outs } of itemsStockOuts) {
       const existing = inventoryMap.get(products.id);
       if (existing) {
-        existing.quantity -= stock_outs.value;
+        existing.quantity -= stock_outs.quantity;
       } else {
         inventoryMap.set(products.id, {
           groups,
           products,
-          quantity: -stock_outs.value,
+          quantity: -stock_outs.quantity,
         })
       }
     }

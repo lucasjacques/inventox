@@ -1,11 +1,13 @@
 "use client"
-import { GenericTable } from "@/components/generic-table";
-import { DEFAULT_LIMIT } from "@/constants"
-import { trpc } from "@/trpc/client"
-import { Suspense, useRef } from "react";
-import { ErrorBoundary } from "react-error-boundary";
+import Image from "next/image";
 import html2pdf from "html2pdf.js"
+import { ErrorBoundary } from "react-error-boundary";
+import { Suspense, useRef } from "react";
+
+import { trpc } from "@/trpc/client"
+import { DEFAULT_LIMIT } from "@/constants"
 import { Button } from "@/components/ui/button";
+import { GenericTable } from "@/components/generic-table";
 
 export const InventorySection = () => {
   return (
@@ -95,7 +97,7 @@ const InventorySectionSuspense = () => {
       <div className="justify-center hidden">
         <div ref={tableRef}>
           <div className="flex justify-between items-center w-full p-4 min-w-0">
-            <img className="w-[200px]" src="/amipesca-logo.png" alt="Amipesca Logo"/>
+            <Image width="200" height="100" unoptimized src="/amipesca-logo.png" alt="Amipesca Logo"/>
             <b className="text-2xl">{nowDate}</b>
           </div>
           <div className="flex m-4">
