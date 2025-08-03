@@ -27,6 +27,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
+import { ProductSelect } from "@/components/product-select"
 
 export const StockOutsSection = () => {
   return (
@@ -65,20 +66,10 @@ const StockOutsSectionSuspense = () => {
     <div>
       <div className="flex justify-center">
         <div className="m-4 flex w-[800px]">
-          <Select onValueChange={(value) => setProductId(value)}>
-            <SelectTrigger className="m-2">
-              <SelectValue placeholder="Selecione um Produto" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {data.pages[0].productsData.map((product, index)=> {
-                  return (
-                    <SelectItem key={index} value={product.id}>{product.name}</SelectItem>
-                  )
-                })}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <ProductSelect
+            products={data.pages[0].productsData}
+            onChange={setProductId}
+          />
           <Input className="m-2" type="number" placeholder="Valor" onChange={(e) => setStockOutsValue(Number(e.target.value))}>
           </Input>
           <Button 
