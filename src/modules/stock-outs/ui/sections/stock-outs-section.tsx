@@ -3,11 +3,8 @@
 import { toast } from "sonner"
 import { ErrorBoundary } from "react-error-boundary"
 import { Suspense, useState } from "react"
-import { Loader2Icon, PlusIcon } from "lucide-react"
 
 import { trpc } from "@/trpc/client"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { DEFAULT_LIMIT } from "@/constants"
 import { InfiniteScroll } from "@/components/infinite-scroll"
 import {
@@ -19,7 +16,8 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import { ProductSelect } from "@/components/product-select"
+
+import { CreateStockOutDialog } from "../dialogs/create-stock-out-dialog"
 
 export const StockOutsSection = () => {
   return (
@@ -57,26 +55,19 @@ const StockOutsSectionSuspense = () => {
   return (
     <div>
       <div className="flex justify-center">
-        <div className="m-4 flex w-[800px]">
-          <ProductSelect
+        <div className="m-4">
+          <CreateStockOutDialog
             products={data.pages[0].productsData}
-            onChange={setProductId}
-          />
-          <Input className="m-2" type="number" placeholder="Valor" onChange={(e) => setStockOutsQuantity(Number(e.target.value))}>
-          </Input>
-          <Button 
-            className="m-2" 
-            disabled={create.isPending}
-            onClick={() => {
+            onCreate={() => {
               if( !productId || stockOutsQuantity === undefined ) {
                 return;
               }
               create.mutate({productId: productId, quantity: stockOutsQuantity})
             }}
-            >
-            {create.isPending ? <Loader2Icon className="animate-spin"/> : <PlusIcon />}
-            Inserir nova saída
-          </Button>
+            createMutation={create}
+            onChangeStockOutQuantity={setStockOutsQuantity}
+            onChangeStockOutProductId={setProductId}
+          />
         </div>
       </div>
       <div className="flex justify-center">
