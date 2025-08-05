@@ -1,14 +1,13 @@
 "use client";
 
-import { Loader2Icon, PlusIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { trpc } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { InfiniteScroll } from "@/components/infinite-scroll";
+import { CreateStockInsDialog } from "../components/dialogs/create-stock-in-dialog";
 import {
   Table,
   TableBody,
@@ -18,8 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { InfiniteScroll } from "@/components/infinite-scroll";
-import { ProductSelect } from "@/components/product-select";
 
 export const StockInsSection = () => {
   return (
@@ -57,27 +54,20 @@ const StockInsSectionSuspense = () => {
 
   return (
     <div>
-      <div className="flex justify-center">
-        <div className="m-4 flex w-[800px]">
-          <ProductSelect 
+      <div className="flex justify-center items-center">
+        <div className="my-4">
+          <CreateStockInsDialog
             products={data.pages[0].productsData}
-            onChange={setProductId} 
-          />
-          <Input className="m-2" type="number" placeholder="Valor" onChange={(e) => setStockInsQuantity(Number(e.target.value))}>
-          </Input>
-          <Button 
-            className="m-2" 
-            disabled={create.isPending}
-            onClick={() => {
+            onCreate={() => {
               if( !productId || stockInsQuantity === undefined ) {
                 return;
               }
               create.mutate({productId: productId, quantity: stockInsQuantity})
             }}
-            >
-            {create.isPending ? <Loader2Icon className="animate-spin"/> : <PlusIcon />}
-            Inserir nova entrada
-          </Button>
+            createMutation={create}
+            onChangeStockInQuantity={setStockInsQuantity}
+            onChangeStockInProductId={setProductId}
+          />
         </div>
       </div>
       <div className="flex justify-center">
