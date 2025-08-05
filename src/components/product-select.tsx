@@ -19,7 +19,7 @@ export const ProductSelect = ({
 }: ProductSelectProps) => {
   return (
     <Select onValueChange={(value) => onChange(value)}>
-      <SelectTrigger className="m-2">
+      <SelectTrigger className="m-2 w-[300px]">
         <SelectValue placeholder="Selecione um Produto" />
       </SelectTrigger>
       <SelectContent>
