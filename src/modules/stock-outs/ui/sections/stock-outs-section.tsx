@@ -3,11 +3,8 @@
 import { toast } from "sonner"
 import { ErrorBoundary } from "react-error-boundary"
 import { Suspense, useState } from "react"
-import { Loader2Icon, PlusIcon } from "lucide-react"
 
 import { trpc } from "@/trpc/client"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { DEFAULT_LIMIT } from "@/constants"
 import { InfiniteScroll } from "@/components/infinite-scroll"
 import {
@@ -19,7 +16,6 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import { ProductSelect } from "@/components/product-select"
 
 import { CreateStockOutDialog } from "../dialogs/create-stock-out-dialog"
 
