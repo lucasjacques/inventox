@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/table"
 import { ProductSelect } from "@/components/product-select"
 
+import { CreateStockOutDialog } from "../dialogs/create-stock-out-dialog"
+
 export const StockOutsSection = () => {
   return (
     <Suspense fallback={<p>Loading...</p>}>
@@ -57,26 +59,19 @@ const StockOutsSectionSuspense = () => {
   return (
     <div>
       <div className="flex justify-center">
-        <div className="m-4 flex w-[800px]">
-          <ProductSelect
+        <div className="m-4">
+          <CreateStockOutDialog
             products={data.pages[0].productsData}
-            onChange={setProductId}
-          />
-          <Input className="m-2" type="number" placeholder="Valor" onChange={(e) => setStockOutsQuantity(Number(e.target.value))}>
-          </Input>
-          <Button 
-            className="m-2" 
-            disabled={create.isPending}
-            onClick={() => {
+            onCreate={() => {
               if( !productId || stockOutsQuantity === undefined ) {
                 return;
               }
               create.mutate({productId: productId, quantity: stockOutsQuantity})
             }}
-            >
-            {create.isPending ? <Loader2Icon className="animate-spin"/> : <PlusIcon />}
-            Inserir nova saída
-          </Button>
+            createMutation={create}
+            onChangeStockOutQuantity={setStockOutsQuantity}
+            onChangeStockOutProductId={setProductId}
+          />
         </div>
       </div>
       <div className="flex justify-center">

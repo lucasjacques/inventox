@@ -7,7 +7,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { trpc } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
 import { InfiniteScroll } from "@/components/infinite-scroll";
-import { CreateStockInsDialog } from "../components/dialogs/create-stock-in-dialog";
+import { CreateStockInDialog } from "../components/dialogs/create-stock-in-dialog";
 import {
   Table,
   TableBody,
@@ -56,7 +56,7 @@ const StockInsSectionSuspense = () => {
     <div>
       <div className="flex justify-center items-center">
         <div className="my-4">
-          <CreateStockInsDialog
+          <CreateStockInDialog
             products={data.pages[0].productsData}
             onCreate={() => {
               if( !productId || stockInsQuantity === undefined ) {

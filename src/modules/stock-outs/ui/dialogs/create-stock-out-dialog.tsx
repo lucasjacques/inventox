@@ -1,10 +1,10 @@
 import { Loader2Icon, PlusIcon } from "lucide-react";
 
+import { ProductSelect } from "@/components/product-select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Product } from "@/modules/products/types";
-import { ProductSelect } from "@/components/product-select";
 import {
   Dialog,
   DialogClose,
@@ -15,27 +15,27 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 
-interface CreateStockInDialogProps {
+interface CreateStockOutDialogProps {
   products: Product[];
   onCreate: () => void
   createMutation: { isPending: boolean };
-  onChangeStockInQuantity: (s: number) => void;
-  onChangeStockInProductId: (id: string) => void;
+  onChangeStockOutQuantity: (s: number) => void;
+  onChangeStockOutProductId: (id: string) => void;
 }
 
-export const CreateStockInDialog = ({
+export const CreateStockOutDialog = ({
   products,
   onCreate,
   createMutation,
-  onChangeStockInQuantity,
-  onChangeStockInProductId,
-}: CreateStockInDialogProps) => {
+  onChangeStockOutQuantity,
+  onChangeStockOutProductId,
+}: CreateStockOutDialogProps) => {
 return (
   <Dialog>
     <form>
       <DialogTrigger asChild>
         <Button variant="blue">
-          Inserir nova Entrada
+          Inserir nova Saída
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[350px]">
@@ -46,14 +46,14 @@ return (
           <Label>Produto:</Label>
           <ProductSelect
             products={products}
-            onChange={onChangeStockInProductId}
+            onChange={onChangeStockOutProductId}
           />
           <Label>Quantidade:</Label>
           <Input 
             className="m-2 w-[300px]"
             type="number"
             placeholder="Quantidade"
-            onChange={(e) => onChangeStockInQuantity(Number(e.target.value))} 
+            onChange={(e) => onChangeStockOutQuantity(Number(e.target.value))} 
           />
         </div>
         <DialogFooter>
