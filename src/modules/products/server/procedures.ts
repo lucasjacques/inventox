@@ -9,6 +9,7 @@ export const productsRouter = createTRPCRouter({
   create: protectedProcedure
   .input(z.object({
     name: z.string(),
+    price: z.number().nullish(),
     groupId: z.string().uuid(),
   }))
   .mutation(async ({ input }) => {
@@ -16,6 +17,7 @@ export const productsRouter = createTRPCRouter({
       .insert(products)
       .values({
         name: input.name,
+        price: input.price,
         groupId: input.groupId,
       })
       .returning();
@@ -40,6 +42,7 @@ export const productsRouter = createTRPCRouter({
   .input(z.object({
     id: z.string().uuid(),
     name: z.string(),
+    price: z.number().nullish(),
     groupId: z.string().uuid(),
   }))
   .mutation(async ({ input }) => {
@@ -47,6 +50,7 @@ export const productsRouter = createTRPCRouter({
       .update(products)
       .set({
         name: input.name,
+        price: input.price,
         groupId: input.groupId,
       })
       .where(eq(products.id, input.id))

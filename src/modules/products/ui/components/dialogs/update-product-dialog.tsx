@@ -23,6 +23,7 @@ interface UpdateProductDialogProps {
   onUpdate: (p: Product) => void;
   product: Product;
   onChangeName: (s: string) => void;
+  onChangePrice: (n: number) => void;
   updateMutation: { isPending: boolean };
   onChangeGroupId: (s: string) => void;
 }
@@ -32,6 +33,7 @@ export const EditProductDialog = ({
   onUpdate,
   product,
   onChangeName,
+  onChangePrice,
   updateMutation,
   onChangeGroupId,
 }: UpdateProductDialogProps) => {
@@ -44,20 +46,28 @@ export const EditProductDialog = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[350px]">
         <DialogHeader>
-            <DialogTitle>Edição do Item: {product.name}</DialogTitle>
+          <DialogTitle>Edição do Item: {product.name}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-3">
           <Label>Nome:</Label>
           <Input
+            className="m-2 w-[300px]"
             type="text"
             placeholder="Escreva aqui o nome do Produto"
             onChange={(e) => onChangeName(e.target.value)}
-            />
+          />
+          <Label>Preço:</Label>
+          <Input
+            className="m-2 w-[300px]"
+            type="number"
+            placeholder="Escreva aqui o preço do Produto"
+            onChange={(e) => onChangePrice(Number(e.target.value))}
+          />
+          <Label>Grupo:</Label>
           <GroupSelect
             groups={groups}
             onChange={onChangeGroupId}
           />
-          <Select></Select>
         </div>
         <DialogFooter>
           <DialogClose asChild>
