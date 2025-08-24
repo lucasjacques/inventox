@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/dialog";
 
 import { Product } from "../../../types";
-import { Select } from "@/components/ui/select";
 import { GroupSelect } from "../../group-select";
 import { Group } from "@/modules/groups/types";
 
