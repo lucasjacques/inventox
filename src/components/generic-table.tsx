@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Table,
   TableBody,
@@ -11,7 +12,7 @@ interface GenericTableProps<T extends object> {
   data: T[];
   getId: (item: T) => string;
   headers: string[];
-  getColumns: (item: T) => string[];
+  getColumns: (item: T) => (string | number | null)[];
   renderRowActions?: (row: T) => React.ReactNode;
 }
 

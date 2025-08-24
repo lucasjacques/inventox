@@ -10,6 +10,7 @@ import { GenericTable } from "@/components/generic-table";
 import { EditProductDialog } from "../components/dialogs/update-product-dialog";
 import { DeleteProductDialog } from "../components/dialogs/delete-product-dialog";
 import { CreateProductDialog } from "../components/dialogs/insert-product-dialog";
+import { nullOrNumberToBRL } from "@/lib/utils";
 
 export const ProductsSection = () => {
   return (
@@ -29,9 +30,11 @@ const ProductsSectionSuspense = () => {
   });
 
   const [ createProductName, setCreateProductName ] = useState("");
+  const [ createProductPrice, setCreateProductPrice ] = useState<number>();
   const [ createProductGroupId, setCreateProductGroupId ] = useState("");
 
   const [ updateProductName, setUpdateProductName ] = useState("");
+  const [ updateProductPrice, setUpdateProductPrice ] = useState<number>();
   const [ updateProductGroupId, setUpdateProductGroupId ] = useState("");
 
   const utils = trpc.useUtils();
@@ -39,6 +42,7 @@ const ProductsSectionSuspense = () => {
     onSuccess: () => {
       setCreateProductGroupId("");
       setCreateProductName("");
+      setUpdateProductPrice(undefined);
       toast.success("Produto criado com sucesso!")
       utils.products.getMany.invalidate();
     },
@@ -60,6 +64,7 @@ const ProductsSectionSuspense = () => {
   const updateProduct = trpc.products.update.useMutation({
     onSuccess: () => {
       setUpdateProductName("");
+      setUpdateProductPrice(undefined);
       setUpdateProductGroupId("");
       toast.success("Produto editado com sucesso!")
       utils.products.getMany.invalidate();
@@ -80,10 +85,15 @@ const ProductsSectionSuspense = () => {
             if ( !createProductGroupId || createProductName === "") {
               return;
             }
-            createProduct.mutate({groupId: createProductGroupId, name: createProductName})
+            createProduct.mutate({
+              name: createProductName,
+              price: createProductPrice,
+              groupId: createProductGroupId,
+            });
           }}
           createMutation={createProduct}
           onChangeProductName={setCreateProductName}
+          onChangeProductPrice={setCreateProductPrice}
           onChangeProductGroupId={setCreateProductGroupId}
         />
       </div>
@@ -92,9 +102,10 @@ const ProductsSectionSuspense = () => {
           <GenericTable
             data={data.pages.flatMap((page) => page.items)}
             getId = {(item) => item.products.id}
-            headers = {["Nome", "Grupo"]}
+            headers = {["Nome", "Preço","Grupo"]}
             getColumns = {(item) => [
               item.products.name,
+              nullOrNumberToBRL(item.products.price),
               item.groups.name
             ]}
             renderRowActions={(item) => (
@@ -105,10 +116,16 @@ const ProductsSectionSuspense = () => {
                     if (!updateProductName) {
                       return;
                     }
-                    updateProduct.mutate({ id: item.id, name: updateProductName, groupId: updateProductGroupId });
+                    updateProduct.mutate({
+                      id: item.id,
+                      name: updateProductName,
+                      price: updateProductPrice,
+                      groupId: updateProductGroupId 
+                    });
                   }}
                   product={item.products}
                   onChangeName={setUpdateProductName}
+                  onChangePrice={setUpdateProductPrice}
                   updateMutation={updateProduct}
                   onChangeGroupId={setUpdateProductGroupId}
                 />

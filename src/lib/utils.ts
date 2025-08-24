@@ -12,3 +12,12 @@ export function getRandomInteger(min: number, max: number) {
 export function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+function numberToBRL(n: number) {
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL"})
+  .format(n);
+}
+
+export function nullOrNumberToBRL(n: number | null) {
+  return n !== null ? numberToBRL(n) : "";
+}

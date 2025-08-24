@@ -8,6 +8,7 @@ import { trpc } from "@/trpc/client"
 import { DEFAULT_LIMIT } from "@/constants"
 import { Button } from "@/components/ui/button";
 import { GenericTable } from "@/components/generic-table";
+import { nullOrNumberToBRL } from "@/lib/utils";
 
 export const InventorySection = () => {
   return (
@@ -85,12 +86,13 @@ const InventorySectionSuspense = () => {
             getColumns={(entry) => {
               return [
                 entry.products.name,
-                entry.quantity.toString(),
+                nullOrNumberToBRL(entry.products.price),
+                entry.quantity,
                 entry.groups.name,
               ] 
             }}
             getId={(entry) => entry.products.id}
-            headers={["Nome", "Quantidade", "Grupo"]}
+            headers={["Nome", "Preço", "Quantidade", "Grupo"]}
             />
             </div>
       </div>
@@ -104,9 +106,10 @@ const InventorySectionSuspense = () => {
             <table className="table-auto w-full border-collapse border border-gray-300">
               <thead>
                 <tr>
-                  <th className="border border-gray-300 px-4 py-2">Nome</th>
-                  <th className="border border-gray-300 px-4 py-2">Quantidade</th>
-                  <th className="border border-gray-300 px-4 py-2">Grupo</th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">Nome</th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">Preço</th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">Quantidade</th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">Grupo</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,6 +117,7 @@ const InventorySectionSuspense = () => {
                   return (
                     <tr key={row.products.id}>
                       <td className="border border-gray-300 px-4 py-2">{row.products.name}</td>
+                      <td className="border border-gray-300 px-4 py-2 font-extrabold text-xl text-red-500">{nullOrNumberToBRL(row.products.price)}</td>
                       <td className="border border-gray-300 px-4 py-2">{row.quantity}</td>
                       <td className="border border-gray-300 px-4 py-2">{row.groups.name}</td>
                     </tr>

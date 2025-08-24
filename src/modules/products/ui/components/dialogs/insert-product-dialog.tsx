@@ -11,6 +11,7 @@ interface CreateProductDialogProps {
   onCreate: () => void
   createMutation: { isPending: boolean };
   onChangeProductName: (s: string) => void;
+  onChangeProductPrice: (n: number) => void;
   onChangeProductGroupId: (id: string) => void;
 }
 
@@ -19,6 +20,7 @@ export const CreateProductDialog = ({
   onCreate,
   createMutation,
   onChangeProductName,
+  onChangeProductPrice,
   onChangeProductGroupId,
 }: CreateProductDialogProps) => {
 return (
@@ -40,6 +42,12 @@ return (
             type="text"
             placeholder="Nome do produto"
             onChange={(e) => onChangeProductName(e.target.value)} 
+          />
+          <Input 
+            className="m-2 w-[300px]"
+            type="number"
+            placeholder="Preço do produto"
+            onChange={(e) => onChangeProductPrice(Number(e.target.value))} 
           />
           <Label>Grupo:</Label>
           <GroupSelect
