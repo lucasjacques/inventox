@@ -8,7 +8,7 @@ import { trpc } from "@/trpc/client"
 import { DEFAULT_LIMIT } from "@/constants"
 import { Button } from "@/components/ui/button";
 import { GenericTable } from "@/components/generic-table";
-import { nullOrNumberToBRL } from "@/lib/utils";
+import { getPriceInBRL } from "@/lib/utils";
 
 export const InventorySection = () => {
   return (
@@ -86,7 +86,7 @@ const InventorySectionSuspense = () => {
             getColumns={(entry) => {
               return [
                 entry.products.name,
-                nullOrNumberToBRL(entry.products.price),
+                getPriceInBRL(entry.products.price),
                 entry.quantity,
                 entry.groups.name,
               ] 
@@ -117,7 +117,7 @@ const InventorySectionSuspense = () => {
                   return (
                     <tr key={row.products.id}>
                       <td className="border border-gray-300 px-4 py-2">{row.products.name}</td>
-                      <td className="border border-gray-300 px-4 py-2 font-extrabold text-xl text-red-500">{nullOrNumberToBRL(row.products.price)}</td>
+                      <td className="border border-gray-300 px-4 py-2 font-extrabold text-xl text-red-500">{getPriceInBRL(row.products.price)}</td>
                       <td className="border border-gray-300 px-4 py-2">{row.quantity}</td>
                       <td className="border border-gray-300 px-4 py-2">{row.groups.name}</td>
                     </tr>

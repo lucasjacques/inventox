@@ -1,14 +1,14 @@
 import { faker } from "@faker-js/faker"
 
 import { db } from "@/db"
-import { groups, products, stockIns, users } from "@/db/schema"
+import { groups, products, stockIns, stockOuts, users } from "@/db/schema"
 import { getRandomInteger } from "@/lib/utils";
 
 const groupProducts = {
   FILES: [
-    "FILE DE ANCHOVA -P- cx 14",
-    "FILE DE ANCHOVA cx 14",
-    "FILE DE CORVINA -P CX 14 KÇ",
+    "FILE DE ANCHOVA -P-",
+    "FILE DE ANCHOVA",
+    "FILE DE CORVINA -P",
     // "FILE DE CORVINA -M CXS 14 KG",
     // "FILE DE CORVINA -G  CX 14KG",
     // "FILE DE  ESPADA BANDEJA CX 17 KG",
@@ -26,9 +26,9 @@ const groupProducts = {
     // "FILE DE SOROROCA CX 15 KG",
   ],
   LAJE: [
-    "LAJE BLOCO 15 KG",
-    "LAJE EVISC  SC S/PÇS CX 15KG",
-    "LAJE EVISC  SC S/PÇS PCT DE 1 K CX 15KG",
+    "LAJE BLOCO",
+    "LAJE EVISC  SC S/PÇS",
+    "LAJE EVISC  SC S/PÇS PCT DE 1 K",
     // "LAJE  EVISC S/C 8/10   15 KG",
   ]
 } as const;
@@ -65,6 +65,10 @@ const products2StockIns = [
 
 async function main() {
   console.log("Seeding...");
+  await db.delete(stockIns);
+  await db.delete(stockOuts);
+  await db.delete(products);
+  await db.delete(groups);
 
   try {
     const userValues = [1,2].map(() => ({
@@ -72,7 +76,6 @@ async function main() {
       clerkId: faker.lorem.text(),
       email: faker.internet.email(),
     }));
-
     const insertedUsers = await db.insert(users).values(userValues).returning();
 
     const groupNames = Object.keys(groupProducts)
@@ -85,6 +88,8 @@ async function main() {
       return productNames.map((productName) => ({
         name: productName,
         groupId: group.id,
+        price: getRandomInteger(5,25) * 10000,
+        packageWeight: getRandomInteger(1,4) * 500000,
       }));
     });
     const insertedProducts = await db.insert(products).values(productValues).returning();

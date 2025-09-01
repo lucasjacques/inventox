@@ -11,8 +11,9 @@ interface CreateProductDialogProps {
   onCreate: () => void
   createMutation: { isPending: boolean };
   onChangeProductName: (s: string) => void;
-  onChangeProductPrice: (n: number) => void;
+  onChangeProductPrice: (s: string) => void;
   onChangeProductGroupId: (id: string) => void;
+  onChangeProductPackageWeight: (s: string) => void;
 }
 
 export const CreateProductDialog = ({
@@ -22,6 +23,7 @@ export const CreateProductDialog = ({
   onChangeProductName,
   onChangeProductPrice,
   onChangeProductGroupId,
+  onChangeProductPackageWeight,
 }: CreateProductDialogProps) => {
 return (
   <Dialog>
@@ -40,19 +42,27 @@ return (
           <Input 
             className="m-2 w-[300px]"
             type="text"
-            placeholder="Nome do produto"
+            placeholder="Nome do Produto"
             onChange={(e) => onChangeProductName(e.target.value)} 
-          />
+            />
+          <Label>Preço:</Label>
           <Input 
             className="m-2 w-[300px]"
             type="number"
-            placeholder="Preço do produto"
-            onChange={(e) => onChangeProductPrice(Number(e.target.value))} 
+            placeholder="Preço do Produto"
+            onChange={(e) => onChangeProductPrice(e.target.value)} 
           />
           <Label>Grupo:</Label>
           <GroupSelect
             groups={groups}
             onChange={onChangeProductGroupId}
+            />
+          <Label>Peso (kg):</Label>
+          <Input 
+            className="m-2 w-[300px]"
+            type="number"
+            placeholder="Peso do Pacote do Produto"
+            onChange={(e) => onChangeProductPackageWeight(e.target.value)} 
           />
         </div>
         <DialogFooter>

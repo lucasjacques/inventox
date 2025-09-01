@@ -18,6 +18,26 @@ function numberToBRL(n: number) {
   .format(n);
 }
 
-export function nullOrNumberToBRL(n: number | null) {
-  return n !== null ? numberToBRL(n) : "";
+export function getPriceInBRL(n: number | null) {
+  return n !== null ? numberToBRL(n / 10000) : "";
+}
+
+export function getPackageWeightInKg(n: number) {
+  return n / 100000;
+}
+
+function setPriceForDB(n: number) {
+  return n * 10000
+}
+
+export function setPriceStringForDB(s: string) {
+  return s !== "" ? setPriceForDB(Number(s)) : null;
+}
+
+function setPackageWeightForDB(n: number) {
+  return n * 100000;
+}
+
+export function setPackageWeightStringForDB(s: string) {
+  return setPackageWeightForDB(Number(s));
 }

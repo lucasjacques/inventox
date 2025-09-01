@@ -6,8 +6,8 @@
     "dev": "next dev",
     "dev:all": "concurrently \"bun dev\" \"bun dev:webhook\"",
     "dev:webhook": "ngrok http --url=manually-refined-collie.ngrok-free.app 3000",
-    "dev:all2": "concurrently \"bun dev\" \"bun dev:webhook2\"",
-    "dev:webhook2": "ngrok http --url=lucasjacques.ngrok.io 3000",
+    "demo:all": "concurrently \"bun dev\" \"bun demo:webhook\"",
+    "demo:webhook": "ngrok http --url=prime-sincerely-scorpion.ngrok-free.app 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
