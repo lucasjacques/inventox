@@ -8,7 +8,7 @@ import { trpc } from "@/trpc/client"
 import { DEFAULT_LIMIT } from "@/constants"
 import { Button } from "@/components/ui/button";
 import { GenericTable } from "@/components/generic-table";
-import { getPriceInBRL } from "@/lib/utils";
+import { getPackageWeightInKg, getPriceInBRL } from "@/lib/utils";
 
 export const InventorySection = () => {
   return (
@@ -86,13 +86,15 @@ const InventorySectionSuspense = () => {
             getColumns={(entry) => {
               return [
                 entry.products.name,
-                getPriceInBRL(entry.products.price),
-                entry.quantity,
                 entry.groups.name,
+                getPriceInBRL(entry.products.price),
+                getPackageWeightInKg(entry.products.packageWeight),
+                entry.quantity,
+                entry.quantity * getPackageWeightInKg(entry.products.packageWeight),
               ] 
             }}
             getId={(entry) => entry.products.id}
-            headers={["Nome", "Preço", "Quantidade", "Grupo"]}
+            headers={["Nome","Grupo","Preço","Peso cx","Qtde (kg)","Total (kg)"]}
             />
             </div>
       </div>
@@ -107,9 +109,11 @@ const InventorySectionSuspense = () => {
               <thead>
                 <tr>
                   <th className="border border-gray-300 px-4 py-2 text-center">Nome</th>
-                  <th className="border border-gray-300 px-4 py-2 text-center">Preço</th>
-                  <th className="border border-gray-300 px-4 py-2 text-center">Quantidade</th>
                   <th className="border border-gray-300 px-4 py-2 text-center">Grupo</th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">Preço</th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">Peso cx</th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">Qtde (kg)</th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">Total (kg)</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,9 +121,11 @@ const InventorySectionSuspense = () => {
                   return (
                     <tr key={row.products.id}>
                       <td className="border border-gray-300 px-4 py-2">{row.products.name}</td>
-                      <td className="border border-gray-300 px-4 py-2 font-extrabold text-xl text-red-500">{getPriceInBRL(row.products.price)}</td>
-                      <td className="border border-gray-300 px-4 py-2">{row.quantity}</td>
                       <td className="border border-gray-300 px-4 py-2">{row.groups.name}</td>
+                      <td className="border border-gray-300 px-4 py-2 font-extrabold text-xl text-red-500">{getPriceInBRL(row.products.price)}</td>
+                      <td className="border border-gray-300 px-4 py-2">{getPackageWeightInKg(row.products.packageWeight)}</td>
+                      <td className="border border-gray-300 px-4 py-2">{row.quantity}</td>
+                      <td className="border border-gray-300 px-4 py-2">{row.quantity * getPackageWeightInKg(row.products.packageWeight)}</td>
                     </tr>
                   )
                 })}
