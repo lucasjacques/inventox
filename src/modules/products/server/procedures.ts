@@ -11,6 +11,7 @@ export const productsRouter = createTRPCRouter({
     name: z.string(),
     price: z.number().nullish(),
     groupId: z.string().uuid(),
+    packageWeight: z.number(),
   }))
   .mutation(async ({ input }) => {
     const [ product ] = await db
@@ -19,6 +20,7 @@ export const productsRouter = createTRPCRouter({
         name: input.name,
         price: input.price,
         groupId: input.groupId,
+        packageWeight: input.packageWeight,
       })
       .returning();
     
@@ -44,6 +46,7 @@ export const productsRouter = createTRPCRouter({
     name: z.string(),
     price: z.number().nullish(),
     groupId: z.string().uuid(),
+    packageWeight: z.number(),
   }))
   .mutation(async ({ input }) => {
     const [ product ] = await db
@@ -52,6 +55,7 @@ export const productsRouter = createTRPCRouter({
         name: input.name,
         price: input.price,
         groupId: input.groupId,
+        packageWeight: input.packageWeight,
       })
       .where(eq(products.id, input.id))
       .returning()

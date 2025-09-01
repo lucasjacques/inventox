@@ -10,7 +10,7 @@ import { GenericTable } from "@/components/generic-table";
 import { EditProductDialog } from "../components/dialogs/update-product-dialog";
 import { DeleteProductDialog } from "../components/dialogs/delete-product-dialog";
 import { CreateProductDialog } from "../components/dialogs/insert-product-dialog";
-import { nullOrNumberToBRL } from "@/lib/utils";
+import { getPackageWeightInKg, getPriceInBRL, setPackageWeightStringForDB, setPriceStringForDB } from "@/lib/utils";
 
 export const ProductsSection = () => {
   return (
@@ -30,19 +30,22 @@ const ProductsSectionSuspense = () => {
   });
 
   const [ createProductName, setCreateProductName ] = useState("");
-  const [ createProductPrice, setCreateProductPrice ] = useState<number>();
+  const [ createProductPrice, setCreateProductPrice ] = useState("");
   const [ createProductGroupId, setCreateProductGroupId ] = useState("");
+  const [ createProductPackageWeight, setCreateProductPackageWeight ] = useState("");
 
   const [ updateProductName, setUpdateProductName ] = useState("");
-  const [ updateProductPrice, setUpdateProductPrice ] = useState<number>();
+  const [ updateProductPrice, setUpdateProductPrice ] = useState("");
   const [ updateProductGroupId, setUpdateProductGroupId ] = useState("");
+  const [ updateProductPackageWeight, setUpdateProductPackageWeight ] = useState("");
 
   const utils = trpc.useUtils();
   const createProduct = trpc.products.create.useMutation({
     onSuccess: () => {
-      setCreateProductGroupId("");
       setCreateProductName("");
-      setUpdateProductPrice(undefined);
+      setCreateProductPrice("");
+      setCreateProductGroupId("");
+      setCreateProductPackageWeight("");
       toast.success("Produto criado com sucesso!")
       utils.products.getMany.invalidate();
     },
@@ -64,8 +67,9 @@ const ProductsSectionSuspense = () => {
   const updateProduct = trpc.products.update.useMutation({
     onSuccess: () => {
       setUpdateProductName("");
-      setUpdateProductPrice(undefined);
+      setUpdateProductPrice("");
       setUpdateProductGroupId("");
+      setUpdateProductPackageWeight("");
       toast.success("Produto editado com sucesso!")
       utils.products.getMany.invalidate();
     },
@@ -82,19 +86,21 @@ const ProductsSectionSuspense = () => {
         <CreateProductDialog
           groups={groupsData}
           onCreate={() => {
-            if ( !createProductGroupId || createProductName === "") {
+            if ( !createProductGroupId || createProductName === "" ) {
               return;
             }
             createProduct.mutate({
               name: createProductName,
-              price: createProductPrice,
+              price: setPriceStringForDB(createProductPrice),
               groupId: createProductGroupId,
+              packageWeight: setPackageWeightStringForDB(createProductPackageWeight),
             });
           }}
           createMutation={createProduct}
           onChangeProductName={setCreateProductName}
           onChangeProductPrice={setCreateProductPrice}
           onChangeProductGroupId={setCreateProductGroupId}
+          onChangeProductPackageWeight={setCreateProductPackageWeight}
         />
       </div>
       <div className="flex justify-center">
@@ -102,25 +108,24 @@ const ProductsSectionSuspense = () => {
           <GenericTable
             data={data.pages.flatMap((page) => page.items)}
             getId = {(item) => item.products.id}
-            headers = {["Nome", "Preço","Grupo"]}
+            headers = {["Nome","Preço","Grupo", "Peso (Kg)"]}
             getColumns = {(item) => [
               item.products.name,
-              nullOrNumberToBRL(item.products.price),
-              item.groups.name
+              getPriceInBRL(item.products.price),
+              item.groups.name,
+              getPackageWeightInKg(item.products.packageWeight),
             ]}
             renderRowActions={(item) => (
               <div className="flex gap-3"> 
                 <EditProductDialog
                   groups={groupsData}
                   onUpdate = {(item) => {
-                    if (!updateProductName) {
-                      return;
-                    }
                     updateProduct.mutate({
                       id: item.id,
                       name: updateProductName,
-                      price: updateProductPrice,
-                      groupId: updateProductGroupId 
+                      price: setPriceStringForDB(updateProductPrice),
+                      groupId: updateProductGroupId,
+                      packageWeight: setPackageWeightStringForDB(updateProductPackageWeight),
                     });
                   }}
                   product={item.products}
@@ -128,6 +133,7 @@ const ProductsSectionSuspense = () => {
                   onChangePrice={setUpdateProductPrice}
                   updateMutation={updateProduct}
                   onChangeGroupId={setUpdateProductGroupId}
+                  onChangePackageWeight={setUpdateProductPackageWeight}
                 />
                 <DeleteProductDialog
                   product={item.products}

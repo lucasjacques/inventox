@@ -8,7 +8,7 @@ import {
   TableRow
 } from "./ui/table";
 
-interface GenericTableProps<T extends object> {
+interface GenericTableProps<T> {
   data: T[];
   getId: (item: T) => string;
   headers: string[];
@@ -16,7 +16,7 @@ interface GenericTableProps<T extends object> {
   renderRowActions?: (row: T) => React.ReactNode;
 }
 
-export function GenericTable<T extends object> ({
+export function GenericTable<T> ({
     data,
     getId,
     headers,
@@ -44,7 +44,7 @@ export function GenericTable<T extends object> ({
             <TableRow key={getId(row)}>
               {getColumns(row).map((cell, index2) => {
                 return (
-                  <TableCell key={index2}>{String(cell)}</TableCell>
+                  <TableCell key={index2}>{cell}</TableCell>
                 )
               })}
               {renderRowActions && (

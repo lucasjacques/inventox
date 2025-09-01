@@ -22,9 +22,10 @@ interface UpdateProductDialogProps {
   onUpdate: (p: Product) => void;
   product: Product;
   onChangeName: (s: string) => void;
-  onChangePrice: (n: number) => void;
+  onChangePrice: (s: string) => void;
   updateMutation: { isPending: boolean };
   onChangeGroupId: (s: string) => void;
+  onChangePackageWeight: (s: string) => void;
 }
 
 export const EditProductDialog = ({
@@ -35,6 +36,7 @@ export const EditProductDialog = ({
   onChangePrice,
   updateMutation,
   onChangeGroupId,
+  onChangePackageWeight,
 }: UpdateProductDialogProps) => {
   return (
     <Dialog>
@@ -60,12 +62,19 @@ export const EditProductDialog = ({
             className="m-2 w-[300px]"
             type="number"
             placeholder="Escreva aqui o preço do Produto"
-            onChange={(e) => onChangePrice(Number(e.target.value))}
+            onChange={(e) => onChangePrice(e.target.value)}
           />
           <Label>Grupo:</Label>
           <GroupSelect
             groups={groups}
             onChange={onChangeGroupId}
+          />
+          <Label>Peso (kg):</Label>
+          <Input
+            className="m-2 w-[300px]"
+            type="number"
+            placeholder="Escreva aqui o peso do pacote do Produto"
+            onChange={(e) => onChangePackageWeight(e.target.value)}
           />
         </div>
         <DialogFooter>

@@ -32,6 +32,7 @@ export const products = pgTable("products", {
   groupId: uuid("group_id").references(() => groups.id, {
     onDelete: "set null"
   }),
+  packageWeight: integer("package_weight").notNull()
 });
 
 export const productRelations = relations(products, ({ one }) => ({
