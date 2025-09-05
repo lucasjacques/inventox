@@ -34,7 +34,7 @@ export const protectedProcedure = t.procedure.use( async function isAuthed(opts)
   const { ctx } = opts;
   if (!ctx.clerkUserId) {
     console.log('clerkid')
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+    throw new TRPCError({ code: "UNAUTHORIZED", message: "No clerkUserId." });
   }
   
   const [ user ] = await db
@@ -42,9 +42,12 @@ export const protectedProcedure = t.procedure.use( async function isAuthed(opts)
   .from(users)
   .where(eq(users.clerkId, ctx.clerkUserId || ""))
   
-  if (!user || user.role !== "admin" ) {
-    console.log('user', ctx.clerkUserId)
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+  if (!user) {
+    throw new TRPCError({ code: "UNAUTHORIZED", message: "No user." });
+  }
+
+  if (process.env.ENVIRONMENT === "PROD" && user.role !== "admin") {
+    throw new TRPCError({ code: "UNAUTHORIZED", message: "No role authorization." });
   }
 
   const { success } = await ratelimit.limit(user.id);
