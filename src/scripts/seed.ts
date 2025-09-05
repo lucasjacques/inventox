@@ -97,7 +97,7 @@ async function main() {
     const stockInValues = products1StockIns.map((quantity, index) => ({
       quantity: quantity,
       productId: insertedProducts[index].id,
-      userId: getRandomInteger(1,2) ? insertedUsers[0].id : insertedUsers[1].id,
+      userId: getRandomInteger(0,1) ? insertedUsers[0].id : insertedUsers[1].id,
     })).concat(products2StockIns.map((quantity, index) => ({
       quantity: quantity,
       productId: insertedProducts[index+3].id,
@@ -105,6 +105,20 @@ async function main() {
     })));
 
     await db.insert(stockIns).values(stockInValues);
+
+    const stockOutValues = products1StockIns.map((quantityIn, index) => ({
+      //quantity out must be equal or less than the quantity in
+      quantity: quantityIn - getRandomInteger(0, quantityIn),
+      productId: insertedProducts[index].id,
+      userId: getRandomInteger(0,1) ? insertedUsers[0].id : insertedUsers[1].id 
+    })).concat(products2StockIns.map((quantityIn, index) => ({
+      //quantity out must be equal or less than the quantity in
+      quantity: quantityIn - getRandomInteger(0, quantityIn),
+      productId: insertedProducts[index+3].id,
+      userId: getRandomInteger(0,1) ? insertedUsers[0].id : insertedUsers[1].id,
+    })))
+
+    await db.insert(stockOuts).values(stockOutValues);
 
     console.log("Db seeded successfully");
   } catch (error) {
