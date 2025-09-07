@@ -101,7 +101,9 @@ const InventorySectionSuspense = () => {
       <div className="justify-center hidden">
         <div ref={tableRef}>
           <div className="flex justify-between items-center w-full p-4 min-w-0">
-            <Image width="200" height="100" unoptimized src="/amipesca-logo.png" alt="Amipesca Logo"/>
+            { process.env.NEXT_PUBLIC_ENVIRONMENT === "PROD" && (
+                <Image width={200} height={100} unoptimized src="/amipesca-logo.png" alt="Amipesca Logo"/>)
+            }
             <b className="text-2xl">{nowDate}</b>
           </div>
           <div className="flex m-4">
