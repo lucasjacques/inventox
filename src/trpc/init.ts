@@ -46,7 +46,7 @@ export const protectedProcedure = t.procedure.use( async function isAuthed(opts)
     throw new TRPCError({ code: "UNAUTHORIZED", message: "No user." });
   }
 
-  if (process.env.ENVIRONMENT === "PROD" && user.role !== "admin") {
+  if (process.env.NEXT_PUBLIC_ENVIRONMENT === "PROD" && user.role !== "admin") {
     throw new TRPCError({ code: "UNAUTHORIZED", message: "No role authorization." });
   }
 
